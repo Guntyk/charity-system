@@ -1,0 +1,49 @@
+.notification {
+  display: flex;
+  gap: 0.8rem;
+  padding: 1.6rem;
+  background: $white;
+  border-radius: 0.8rem;
+  border: 0.1rem solid $primary1;
+  max-width: 38.4rem;
+
+  &.error {
+    color: $white;
+    border-color: $red;
+    background: $red;
+  }
+
+  &.fly {
+    position: fixed;
+    bottom: 3rem;
+    right: 3rem;
+    animation: fade-out 2.1s linear;
+    animation-delay: 3s;
+    -webkit-animation-delay: 3s;
+    z-index: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.title,
+.icon {
+  font-size: 2rem;
+}
+
+.text {
+  font-size: 1.6rem;
+}

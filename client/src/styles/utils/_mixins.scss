@@ -1,0 +1,22 @@
+@mixin typography($key, $weight: regular) {
+  font-family: $font;
+  font-size: map-get($fontSizes, $key);
+  line-height: map-get($lineHeights, $key);
+  font-weight: map-get($fontWeights, $weight);
+
+  @media (max-width: 768px) {
+    font-size: map-get($fontSizesMobile, $key);
+    line-height: map-get($lineHeightsMobile, $key);
+  }
+}
+
+@mixin container($maxWidth: 123.2rem) {
+  position: relative;
+  margin: 0 auto;
+  padding-inline: 1.6rem;
+  max-width: 123.2rem;
+
+  @media (max-width: 557px) {
+    max-width: unset;
+  }
+}

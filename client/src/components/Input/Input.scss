@@ -1,0 +1,102 @@
+.field {
+  position: relative;
+  overflow: hidden;
+
+  &.invalid {
+    .inputArea {
+      margin-bottom: 1.8rem;
+    }
+
+    .input {
+      padding-right: 4.2rem;
+      border-color: $red;
+      &:focus-visible ~ .roleIcon {
+        color: $gray;
+      }
+    }
+
+    .error {
+      &Icon {
+        opacity: 1;
+        transform: translate(0, -50%);
+      }
+
+      &Text {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.inputArea {
+  position: relative;
+  transition: 0.2s;
+
+  .icon {
+    position: absolute;
+    top: 50%;
+    left: 1.6rem;
+    color: $gray;
+    font-size: 1.8rem;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: color 0.2s ease;
+  }
+
+  .errorIcon {
+    left: unset;
+    right: 1.6rem;
+    color: $red;
+    transform: translate(150%, -50%);
+    transition: 0.2s;
+  }
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  padding-block: 0.8rem;
+  padding-inline: 4.2rem 1.6rem;
+  font-size: 1.8rem;
+  caret-color: $primary1;
+  border-radius: 0.8rem;
+  border: 0.1rem solid $gray;
+  background: $white;
+  transition: 0.2s ease;
+
+  &:focus-visible {
+    border-color: $primary1;
+  }
+
+  &::placeholder {
+    color: $gray;
+    font-size: 1.6rem;
+  }
+}
+
+.input:focus-visible ~ .roleIcon,
+.field.valid .roleIcon {
+  color: $primary1;
+}
+
+.error {
+  color: $red;
+  font-size: 1.4rem;
+
+  &Icon {
+    opacity: 0;
+    transition: 0.2s;
+  }
+
+  &Text {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    // display: block;
+    // width: 100%;
+    // min-height: 1rem;
+    // height: min-content;
+    opacity: 0;
+    transition: 0.2s;
+  }
+}

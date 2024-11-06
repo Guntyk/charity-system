@@ -1,0 +1,70 @@
+$mainFontSize: 10px;
+$font: 'Poppins';
+
+$gapExtraLarge: 3.2rem;
+$gapLarge: 2.4rem;
+$gapMedium: 1.6rem;
+$gapSmall: 1.2rem;
+$gapExtraSmall: 0.8rem;
+
+$fontWeights: (
+  'thin': 100,
+  'extraLight': 200,
+  'light': 300,
+  'regular': 400,
+  'medium': 500,
+  'semiBold': 600,
+  'bold': 700,
+);
+
+$fontSizes: (
+  'h1': 8.8rem,
+  'h2': 7.2rem,
+  'h3': 4.8rem,
+  'h4': 3.2rem,
+  'body1': 2.4rem,
+  'body2': 2rem,
+  'body3': 1.8rem,
+  'body4': 1.6rem,
+  'button': 1.6rem,
+  'field': 1.6rem,
+);
+
+$lineHeights: (
+  'h1': 7.2rem,
+  'h2': 5.6rem,
+  'h3': 4rem,
+  'h4': 3.2rem,
+  'body1': 3.2rem,
+  'body2': 2.8rem,
+  'body3': 2.4rem,
+  'body4': 2.4rem,
+  'button': 2.4rem,
+  'field': 2.4rem,
+);
+
+$fontSizesMobile: (
+  'h1': 5.2rem,
+  'h2': 4.8rem,
+  'h3': 4rem,
+  'h4': 2.4rem,
+  'body1': 1.8rem,
+  'body2': 1.6rem,
+  'body3': 1.4rem,
+  'body4': 1.4rem,
+  'button': 1.6rem,
+  'field': 1.6rem,
+);
+
+$lineHeightsMobile: (
+  'h1': 4.4rem,
+  'h2': 4rem,
+  'h3': 3.2rem,
+  'h4': 3.2rem,
+  'body1': 2.4rem,
+  'body2': 2.2rem,
+  'body3': 2rem,
+  'body4': 2.4rem,
+  'button': 2.4rem,
+  'field': 2.4rem,
+);
