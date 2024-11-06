@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import cn from 'classnames';
-import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
-import styles from 'components/Notification/Notification.scss';
 import { useState } from 'react';
+import cn from 'classnames';
+import { faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import styles from 'components/Notification/Notification.scss';
 
 export const Notification = ({ className, title, text, type, flyStyle }) => {
   const [isShown, setIsShown] = useState(true);
@@ -18,6 +18,8 @@ export const Notification = ({ className, title, text, type, flyStyle }) => {
 
   const renderIcon = () => {
     switch (type) {
+      case 'success':
+        return faCircleCheck;
       case 'error':
         return faCircleExclamation;
       default:

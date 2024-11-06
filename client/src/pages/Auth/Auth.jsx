@@ -1,4 +1,4 @@
-import { registerUser, loginUser } from '@redux/features/userSlice';
+import { registerUser, loginUser } from '@redux/features/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -19,13 +19,17 @@ export const Auth = () => {
 
   const dispatch = useDispatch();
   const { replace } = useHistory();
-  const { isAuthenticated, error } = useSelector((state) => state.users);
+  const { isAuthenticated, error } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isAuthenticated) {
       replace('/');
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    setHasSubmitted(false);
+  }, [isLogin]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

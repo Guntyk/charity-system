@@ -4,7 +4,7 @@ import { setToken, getToken, removeToken, refreshExpiry } from 'services/tokenSe
 
 const API_URL = process.env.REACT_APP_SERVER_API_URL;
 
-export const registerUser = createAsyncThunk('users/registerUser', async (userData, { dispatch, rejectWithValue }) => {
+export const registerUser = createAsyncThunk('auth/registerUser', async (userData, { dispatch, rejectWithValue }) => {
   try {
     const response = await axios.post(`${API_URL}/auth/register`, userData);
     await dispatch(loginUser({ email: userData.email, password: userData.password }));
@@ -14,7 +14,7 @@ export const registerUser = createAsyncThunk('users/registerUser', async (userDa
   }
 });
 
-export const loginUser = createAsyncThunk('users/loginUser', async (credentials, { rejectWithValue }) => {
+export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, { rejectWithValue }) => {
   try {
     const response = await axios.post(`${API_URL}/auth/login`, credentials);
     setToken(response.data.token);
@@ -24,10 +24,9 @@ export const loginUser = createAsyncThunk('users/loginUser', async (credentials,
   }
 });
 
-const userSlice = createSlice({
-  name: 'users',
+const authSlice = createSlice({
+  name: 'auth',
   initialState: {
-    users: [],
     error: null,
     isLoading: false,
     token: getToken(),
@@ -44,7 +43,6 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.users.push(action.payload);
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -75,7 +73,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { logoutUser } = authSlice.actions;
+export default authSlice.reducer;
 
 refreshExpiry();

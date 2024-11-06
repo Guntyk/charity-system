@@ -1,0 +1,125 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  padding: 3rem 4rem;
+  width: min-content;
+  height: 100vh;
+}
+
+button.logo {
+  padding: 0.75rem;
+  height: 7rem;
+  width: 7rem;
+  line-height: 1;
+  font-size: 4.8rem;
+  border-radius: 50%;
+
+  &::before {
+    transform: translate3d(0, 0.25em, -1em);
+  }
+
+  &:focus-visible,
+  &:hover {
+    transform: translate(0, 0.125em);
+
+    &::before {
+      transform: translate3d(0, 0.125em, -1em);
+    }
+  }
+
+  &:active {
+    transform: translate(0em, 0.25em);
+
+    &::before {
+      transform: translate3d(0, 0, -1em);
+    }
+  }
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.link {
+  position: relative;
+  display: inline-block;
+  height: 4rem;
+  aspect-ratio: 1;
+  padding: 1rem;
+  border-radius: 50%;
+  border: 0.1rem solid transparent;
+  transition: 0.3s;
+
+  &:hover {
+    border-color: $primaryDark;
+
+    .icon {
+      color: $primary1;
+    }
+
+    .tooltip {
+      transition-delay: 0.2s;
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-0.25rem) translateY(-50%);
+    }
+  }
+
+  &.active {
+    pointer-events: none;
+    background: $primary1;
+
+    .icon {
+      color: $white;
+    }
+  }
+
+  &.exitBtn {
+    margin-top: auto;
+
+    .icon {
+      color: $red;
+    }
+    .tooltip {
+      background: $red;
+    }
+
+    &:hover {
+      border-color: $red;
+      background: $red;
+
+      .icon {
+        color: $white;
+      }
+    }
+  }
+}
+
+.icon {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  color: $gray;
+  transition: 0.2s;
+}
+
+.tooltip {
+  margin-left: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  color: $white;
+  font-size: 1.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.4rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  background-color: $primary1;
+  transform: translateX(0.25rem) translateY(-50%);
+  transition: 0.2s;
+}
