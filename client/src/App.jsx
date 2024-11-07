@@ -9,6 +9,7 @@ import styles from 'App.scss';
 
 export default function App() {
   const [headerTitle, setHeaderTitle] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const { pathname } = useLocation();
   const { replace } = useHistory();
 
@@ -22,17 +23,12 @@ export default function App() {
     <div className={styles.app}>
       <Sidebar setHeaderTitle={setHeaderTitle} />
       <div className={styles.pages}>
-        <Header title={headerTitle} />
-        <main>
+        <Header title={headerTitle} isLoading={isLoading} />
+        <main className={styles.page}>
           <Switch>
             {routes.map(
-              ({ id, link, component: Component }) =>
-                Component &&
-                link && (
-                  <PrivateRoute path={link} exact key={id}>
-                    <Component />
-                  </PrivateRoute>
-                )
+              ({ id, link, component }) =>
+                component && <PrivateRoute component={component} setIsLoading={setIsLoading} path={link} key={id} />
             )}
             <Route path='/auth' exact>
               <Auth />

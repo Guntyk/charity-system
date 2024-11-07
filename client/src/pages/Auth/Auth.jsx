@@ -28,6 +28,8 @@ export const Auth = () => {
   }, [isAuthenticated]);
 
   useEffect(() => {
+    setFormData({ email: '', password: '', name: '', role: 1 });
+    setErrors({ email: '', password: '' });
     setHasSubmitted(false);
   }, [isLogin]);
 

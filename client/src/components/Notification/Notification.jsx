@@ -1,56 +1,39 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import cn from 'classnames';
 import { faCircleCheck, faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { removeNotification } from '@redux/features/notificationsSlice';
 import styles from 'components/Notification/Notification.scss';
 
-export const Notification = ({ className, title, text, type, flyStyle }) => {
-  const [isShown, setIsShown] = useState(true);
+export const Notification = ({ position = 'bottom-right' }) => {
+  const notifications = useSelector((state) => state.notifications.notifications);
+  const dispatch = useDispatch();
 
-  const renderTitle = () => {
-    switch (type) {
-      case 'error':
-        return 'Error';
-      default:
-        return title;
-    }
-  };
-
-  const renderIcon = () => {
-    switch (type) {
-      case 'success':
-        return faCircleCheck;
-      case 'error':
-        return faCircleExclamation;
-      default:
-        return null;
-    }
-  };
-
-  if (flyStyle) {
-    setTimeout(() => {
-      setIsShown(false);
-    }, 5000);
-  }
+  useEffect(() => {
+    notifications.forEach(({ id, duration, autoClose = true }) => {
+      if (autoClose) {
+        setTimeout(() => {
+          dispatch(removeNotification(id));
+        }, duration || 5000);
+      }
+    });
+  }, [notifications, dispatch]);
 
   return (
-    isShown && (
-      <aside className={cn(styles.notification, className, styles[type], { [styles.fly]: flyStyle })}>
-        <FontAwesomeIcon icon={renderIcon()} className={cn(styles.icon, styles[type])} />
-        <section className={styles.content}>
-          <p className={styles.title}>{title ?? renderTitle()}</p>
-          {text && <p className={styles.text}>{text}</p>}
-        </section>
-        {!flyStyle && (
-          <button
-            className={cn(styles.icon, styles.cross)}
-            onClick={() => setIsShown(false)}
-            title='Close notification'
-          >
-            Close
+    <div className={cn(styles.notificationContainer, styles[position])}>
+      {notifications.map(({ id, type, title, text }) => (
+        <aside key={id} className={cn(styles.notification, styles[type])}>
+          <FontAwesomeIcon icon={type === 'success' ? faCircleCheck : faCircleExclamation} className={styles.icon} />
+          <section>
+            <p className={styles.title}>{title}</p>
+            {text && <p className={styles.text}>{text}</p>}
+          </section>
+          <button className={styles.closeButton} onClick={() => dispatch(removeNotification(id))}>
+            &times;
           </button>
-        )}
-      </aside>
-    )
+        </aside>
+      ))}
+    </div>
   );
 };

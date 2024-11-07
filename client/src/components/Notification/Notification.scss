@@ -1,26 +1,71 @@
-.notification {
+.notificationContainer {
+  position: fixed;
+  z-index: 1000;
   display: flex;
+  flex-direction: column;
   gap: 0.8rem;
-  padding: 1.6rem;
-  background: $white;
-  border-radius: 0.8rem;
-  border: 0.1rem solid $primary1;
-  max-width: 38.4rem;
 
-  &.error {
-    color: $white;
-    border-color: $red;
-    background: $red;
-  }
-
-  &.fly {
-    position: fixed;
+  &.bottom-right {
     bottom: 3rem;
     right: 3rem;
-    animation: fade-out 2.1s linear;
-    animation-delay: 3s;
-    -webkit-animation-delay: 3s;
-    z-index: 1;
+  }
+
+  &.top-right {
+    top: 3rem;
+    right: 3rem;
+  }
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1.2rem 0.8rem;
+  font-size: 1.6rem;
+  background: $white;
+  border: 0.1rem solid $lightGray;
+  border-left: 0.4rem solid $primary1;
+  border-radius: 0.8rem;
+  transition: opacity 0.3s ease-in-out;
+  animation: slide-in 0.5s ease, fade-out 0.5s ease 4.5s forwards;
+
+  &.success {
+    color: $green;
+    border-left-color: $green;
+  }
+
+  &.error {
+    color: $red;
+    border-left-color: $red;
+  }
+}
+
+.icon,
+.title {
+  font-size: 1.8rem;
+}
+
+.text {
+  margin-top: 0.8rem;
+}
+
+.closeButton {
+  color: $gray;
+  font-size: 2.4rem;
+
+  &:hover {
+    color: black;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 
@@ -31,19 +76,4 @@
   to {
     opacity: 0;
   }
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.title,
-.icon {
-  font-size: 2rem;
-}
-
-.text {
-  font-size: 1.6rem;
 }
