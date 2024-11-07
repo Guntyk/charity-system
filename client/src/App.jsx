@@ -9,7 +9,7 @@ import styles from 'App.scss';
 
 export default function App() {
   const [headerTitle, setHeaderTitle] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { pathname } = useLocation();
   const { replace } = useHistory();
 

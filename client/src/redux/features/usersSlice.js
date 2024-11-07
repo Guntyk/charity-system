@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { getToken } from 'services/tokenService';
 
 const API_URL = process.env.REACT_APP_SERVER_API_URL;
 
@@ -15,7 +16,12 @@ export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWit
 
 export const updateUserRoles = createAsyncThunk('users/updateUserRoles', async (changedRoles, { rejectWithValue }) => {
   try {
-    const response = await axios.put(`${API_URL}/users/roles`, changedRoles);
+    const token = getToken();
+    const response = await axios.put(`${API_URL}/users/roles`, changedRoles, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || 'Updating user roles failed');

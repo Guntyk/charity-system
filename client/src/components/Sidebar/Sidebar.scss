@@ -71,30 +71,11 @@ button.logo {
 
   &.active {
     pointer-events: none;
-    background: $primary1;
+    background: $secondary1;
+    border-color: $secondaryDark;
 
     .icon {
-      color: $white;
-    }
-  }
-
-  &.exitBtn {
-    margin-top: auto;
-
-    .icon {
-      color: $red;
-    }
-    .tooltip {
-      background: $red;
-    }
-
-    &:hover {
-      border-color: $red;
-      background: $red;
-
-      .icon {
-        color: $white;
-      }
+      color: $primary1;
     }
   }
 }
@@ -122,4 +103,67 @@ button.logo {
   background-color: $primary1;
   transform: translateX(0.25rem) translateY(-50%);
   transition: 0.2s;
+}
+
+.accountWrapper {
+  margin-top: auto;
+  position: relative;
+}
+
+.account {
+  display: grid;
+  place-items: center;
+  color: $white;
+  height: 4rem;
+  width: 4rem;
+  font-size: 2.4rem;
+  aspect-ratio: 1;
+  user-select: none;
+  background: $primary1;
+  border-radius: 50%;
+  border: 0.1rem solid $primaryDark;
+  cursor: pointer;
+
+  &Actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1.6rem;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    bottom: calc(100% + 0.8rem);
+    font-size: 1.6rem;
+    pointer-events: none;
+    border: 0.1rem solid $gray;
+    border-radius: 0.8rem;
+    translate: 0 -1rem;
+    transition: 0.2s;
+
+    &.active {
+      opacity: 1;
+      pointer-events: all;
+      translate: 0;
+    }
+  }
+}
+
+.exitBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+  padding: 0.4rem 1.2rem;
+  color: $red;
+  font-size: 1.4rem;
+  white-space: nowrap;
+  border: 0.1rem solid $red;
+  border-radius: 0.8rem;
+  transition: 0.2s;
+
+  &:hover {
+    color: $white;
+    background: $red;
+  }
 }

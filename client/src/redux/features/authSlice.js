@@ -24,9 +24,24 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, 
   }
 });
 
+export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async (_, { rejectWithValue }) => {
+  try {
+    const token = getToken();
+    const response = await axios.get(`${API_URL}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || 'Failed to fetch user');
+  }
+});
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
+    user: null,
     error: null,
     isLoading: false,
     token: getToken(),
@@ -35,6 +50,7 @@ const authSlice = createSlice({
   reducers: {
     logoutUser: (state) => {
       removeToken();
+      state.user = null;
       state.token = null;
       state.isAuthenticated = false;
       state.error = null;
@@ -42,7 +58,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
@@ -56,14 +72,20 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.error = action.payload || 'Login failed';
       })
-      .addCase(registerUser.pending, (state) => {
-        state.isLoading = true;
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.user = action.payload;
         state.error = null;
       })
-      .addCase(loginUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        state.error = action.payload || 'Failed to fetch user';
       })
+      .addMatcher(
+        (action) => action.type.endsWith('/pending'),
+        (state) => {
+          state.error = null;
+          state.isLoading = true;
+        }
+      )
       .addMatcher(
         (action) => action.type.endsWith('/fulfilled') || action.type.endsWith('/rejected'),
         (state) => {

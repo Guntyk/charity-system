@@ -1,26 +1,19 @@
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useHistory, Link } from 'react-router-dom';
-import { logoutUser } from '@redux/features/authSlice';
+import { useSelector } from 'react-redux';
 import cn from 'classnames';
 import { routes } from 'constants/routes';
-import styles from 'components/Sidebar/Sidebar.scss';
+import { Account } from 'components/Sidebar/Account';
 import { Button } from 'components/Button';
+import styles from 'components/Sidebar/Sidebar.scss';
 
 export const Sidebar = ({ setHeaderTitle }) => {
-  const isUserAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const { pathname } = useLocation();
-  const dispatch = useDispatch();
   const { push } = useHistory();
 
   const navigateToHomePage = () => {
     push(routes[0].link);
-    setHeaderTitle('');
-  };
-
-  const logout = () => {
-    dispatch(logoutUser());
     setHeaderTitle('');
   };
 
@@ -29,7 +22,7 @@ export const Sidebar = ({ setHeaderTitle }) => {
       <Button className={styles.logo} onClick={navigateToHomePage}>
         S
       </Button>
-      {isUserAuthenticated && (
+      {isAuthenticated && (
         <>
           <nav>
             <ul className={styles.navigation}>
@@ -50,10 +43,7 @@ export const Sidebar = ({ setHeaderTitle }) => {
               )}
             </ul>
           </nav>
-          <button className={cn(styles.link, styles.exitBtn)} onClick={logout}>
-            <FontAwesomeIcon icon={faRightFromBracket} className={styles.icon} />
-            <div className={styles.tooltip}>Log out</div>
-          </button>
+          <Account setHeaderTitle={setHeaderTitle} />
         </>
       )}
     </aside>

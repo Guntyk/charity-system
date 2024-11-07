@@ -1,4 +1,4 @@
-import { registerUser, loginUser } from '@redux/features/authSlice';
+import { registerUser, loginUser, getCurrentUser } from '@redux/features/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -23,6 +23,7 @@ export const Auth = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
+      dispatch(getCurrentUser());
       replace('/');
     }
   }, [isAuthenticated]);

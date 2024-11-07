@@ -12,10 +12,14 @@ const getAllUsers = async (req, res) => {
 const updateUserRoles = async (req, res) => {
   try {
     const updatedUsers = [];
+    const currentUserId = req.user.id;
 
     for (const [userId, role] of Object.entries(req.body)) {
-      const roleValue = role === 1 || role === 2 ? role : null;
+      if (parseInt(userId, 10) === currentUserId) {
+        return res.status(403).json({ message: 'You cannot change your own role' });
+      }
 
+      const roleValue = role === 1 || role === 2 ? role : null;
       if (roleValue !== null) {
         await User.update({ role: roleValue }, { where: { id: userId } });
 
