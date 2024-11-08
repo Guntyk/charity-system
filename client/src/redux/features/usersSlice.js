@@ -1,12 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { api } from 'api';
 import { getToken } from 'services/tokenService';
-
-const API_URL = process.env.REACT_APP_SERVER_API_URL;
 
 export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${API_URL}/users`);
+    const response = await api.get('/users');
 
     return response.data;
   } catch (error) {
@@ -17,7 +15,7 @@ export const getUsers = createAsyncThunk('users/getUsers', async (_, { rejectWit
 export const updateUserRoles = createAsyncThunk('users/updateUserRoles', async (changedRoles, { rejectWithValue }) => {
   try {
     const token = getToken();
-    const response = await axios.put(`${API_URL}/users/roles`, changedRoles, {
+    const response = await api.put('/users/roles', changedRoles, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

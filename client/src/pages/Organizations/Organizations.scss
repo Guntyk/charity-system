@@ -2,6 +2,7 @@
   display: flex;
   justify-content: end;
   align-items: center;
+  gap: 1.6rem;
   height: 7rem;
   margin-bottom: 3rem;
 }
@@ -33,4 +34,19 @@
   .role {
     padding: 0;
   }
+}
+
+.createTitle {
+  text-align: left;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 40rem;
+}
+
+.createBtn {
+  margin-top: 0.8rem;
 }

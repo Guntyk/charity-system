@@ -4,7 +4,7 @@
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: $black;
+  background-color: black;
   opacity: 0;
   pointer-events: none;
   transition: 0.3s;
@@ -18,17 +18,19 @@
 .modal {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 3rem 5rem;
+  gap: 1.6rem;
+  padding: 4rem;
   position: fixed;
   left: 50%;
-  top: 50%;
+  top: 45%;
   opacity: 0;
   max-height: 95dvh;
   overflow-x: hidden;
+  font-size: 2.4rem;
+  font-weight: map-get($fontWeights, 'medium');
   translate: -50% -50%;
   pointer-events: none;
-  border-radius: 2rem;
+  border-radius: 0.8rem;
   background: $white;
   transition: 0.3s;
 

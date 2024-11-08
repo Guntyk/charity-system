@@ -1,15 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useLocation, useHistory, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
+import { clearAllNotifications } from '@redux/features/notificationsSlice';
 import { routes } from 'constants/routes';
 import { Account } from 'components/Sidebar/Account';
 import { Button } from 'components/Button';
 import styles from 'components/Sidebar/Sidebar.scss';
 
 export const Sidebar = ({ setHeaderTitle }) => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, token } = useSelector((state) => state.auth);
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   const { push } = useHistory();
 
   const navigateToHomePage = () => {
@@ -17,11 +19,16 @@ export const Sidebar = ({ setHeaderTitle }) => {
     setHeaderTitle('');
   };
 
+  const navigate = (title) => {
+    dispatch(clearAllNotifications());
+    setHeaderTitle(title);
+  };
+
   return (
     <aside className={styles.sidebar}>
-      <Button className={styles.logo} onClick={navigateToHomePage}>
+      <button className={styles.logo} onClick={navigateToHomePage}>
         S
-      </Button>
+      </button>
       {isAuthenticated && (
         <>
           <nav>
@@ -33,7 +40,7 @@ export const Sidebar = ({ setHeaderTitle }) => {
                       <Link
                         to={link}
                         className={cn(styles.link, { [styles.active]: pathname.includes(link) })}
-                        onClick={() => setHeaderTitle(title)}
+                        onClick={() => navigate(title)}
                       >
                         <FontAwesomeIcon icon={icon} className={styles.icon} />
                         <div className={styles.tooltip}>{title}</div>
@@ -43,7 +50,7 @@ export const Sidebar = ({ setHeaderTitle }) => {
               )}
             </ul>
           </nav>
-          <Account setHeaderTitle={setHeaderTitle} />
+          {token && <Account setHeaderTitle={setHeaderTitle} />}
         </>
       )}
     </aside>

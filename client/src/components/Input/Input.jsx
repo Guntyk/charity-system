@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cn from 'classnames';
 import styles from 'components/Input/Input.scss';
 
-export const Input = ({ placeholder, type, icon, errorText, invalid, ...props }) => {
+export const Input = ({ className, placeholder, type, icon, errorText, invalid, ...props }) => {
   return (
-    <label className={cn(styles.field, { [styles.invalid]: invalid })}>
+    <label className={cn(styles.field, className, { [styles.invalid]: invalid })}>
       <div className={styles.inputArea}>
         <input className={styles.input} type={type || 'text'} placeholder={placeholder || ''} {...props} />
         <FontAwesomeIcon className={cn(styles.icon, styles.roleIcon)} icon={icon} />

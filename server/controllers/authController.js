@@ -2,6 +2,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const generateAccessToken = (user) => {
+  return jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+};
+
+const generateRefreshToken = (user) => {
+  return jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+};
+
 const register = async (req, res) => {
   const { email, password, name, role } = req.body;
 
@@ -25,8 +33,13 @@ const login = async (req, res) => {
   try {
     const user = await User.findOne({ where: { email } });
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-      res.json({ token });
+      const token = generateAccessToken(user);
+      const refreshToken = generateRefreshToken(user);
+
+      user.refreshToken = refreshToken;
+      await user.save();
+
+      res.json({ token, refreshToken });
     } else {
       res.status(401).json({ message: 'Incorrect credentials' });
     }
@@ -58,8 +71,30 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const refresh = async (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token required' });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findOne({ where: { id: decoded.userId, refreshToken } });
+
+    if (!user) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    const newAccessToken = generateAccessToken(user);
+    res.json({ token: newAccessToken });
+  } catch (error) {
+    res.status(403).json({ message: 'Invalid or expired refresh token' });
+  }
+};
+
 module.exports = {
   getCurrentUser,
   register,
   login,
+  refresh,
 };

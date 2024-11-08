@@ -7,8 +7,8 @@ import { logoutUser, getCurrentUser } from '@redux/features/authSlice';
 import styles from 'components/Sidebar/Sidebar.scss';
 
 export const Account = ({ setHeaderTitle }) => {
-  const { user } = useSelector((state) => state.auth);
   const [isUserActionsOpen, setIsUserActionsOpen] = useState(false);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const accountRef = useRef();
 
@@ -18,17 +18,35 @@ export const Account = ({ setHeaderTitle }) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (accountRef.current && !accountRef.current.contains(event.target)) {
+        setIsUserActionsOpen(false);
+      }
+    };
+
+    if (isUserActionsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserActionsOpen, setIsUserActionsOpen]);
+
   const logout = () => {
     dispatch(logoutUser());
     setHeaderTitle('');
   };
 
   return (
-    <div className={styles.accountWrapper}>
+    <div className={styles.accountWrapper} ref={accountRef}>
       <span className={styles.account} onClick={() => setIsUserActionsOpen(!isUserActionsOpen)}>
         {user?.name.slice(0, 1)}
       </span>
-      <div className={cn(styles.accountActions, { [styles.active]: isUserActionsOpen })} ref={accountRef}>
+      <div className={cn(styles.accountActions, { [styles.active]: isUserActionsOpen })}>
         <span>{user?.name}</span>
         <span>{user?.email}</span>
         <button className={styles.exitBtn} onClick={logout}>

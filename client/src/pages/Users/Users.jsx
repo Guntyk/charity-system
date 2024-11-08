@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
-import { getUsers, updateUserRoles, resetError } from '@redux/features/usersSlice';
+import { getUsers, updateUserRoles } from '@redux/features/usersSlice';
 import { addNotification } from '@redux/features/notificationsSlice';
 import { Notification } from 'components/Notification';
 import { Button } from 'components/Button';

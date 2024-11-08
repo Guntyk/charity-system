@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import cn from 'classnames';
 import styles from 'components/Modal/Modal.scss';
 
-export const Modal = ({ isOpen, setIsOpen, children }) => {
+export const Modal = ({ className, isOpen, setIsOpen, children }) => {
   const modalRef = useRef();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const Modal = ({ isOpen, setIsOpen, children }) => {
   return (
     <>
       <div className={cn(styles.overlay, { [styles.active]: isOpen })}></div>
-      <div className={cn(styles.modal, { [styles.active]: isOpen })} ref={modalRef}>
+      <div className={cn(styles.modal, className, { [styles.active]: isOpen })} ref={modalRef}>
         {children}
       </div>
     </>

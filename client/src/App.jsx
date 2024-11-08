@@ -6,6 +6,7 @@ import { Sidebar } from 'components/Sidebar';
 import { Header } from 'components/Header';
 import { Auth } from 'pages/Auth';
 import styles from 'App.scss';
+import { AuthWatcher } from 'components/AuthWatcher';
 
 export default function App() {
   const [headerTitle, setHeaderTitle] = useState('');
@@ -21,6 +22,7 @@ export default function App() {
 
   return (
     <div className={styles.app}>
+      <AuthWatcher setHeaderTitle={setHeaderTitle} setIsLoading={setIsLoading} />
       <Sidebar setHeaderTitle={setHeaderTitle} />
       <div className={styles.pages}>
         <Header title={headerTitle} isLoading={isLoading} />

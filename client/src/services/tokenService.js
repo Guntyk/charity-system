@@ -1,23 +1,25 @@
 import Cookies from 'js-cookie';
 
-const TOKEN_KEY = 'auth_token';
-const TOKEN_EXPIRY_DAYS = 7;
+const TOKEN_KEY = 'access_token';
+const REFRESH_TOKEN_KEY = 'refresh_token';
 
 export const setToken = (token) => {
-  Cookies.set(TOKEN_KEY, token, { expires: TOKEN_EXPIRY_DAYS });
+  Cookies.set(TOKEN_KEY, token, { expires: 1 / 24 });
 };
 
 export const getToken = () => {
   return Cookies.get(TOKEN_KEY);
 };
 
-export const removeToken = () => {
-  Cookies.remove(TOKEN_KEY);
+export const setRefreshToken = (token) => {
+  Cookies.set(REFRESH_TOKEN_KEY, token, { expires: 7 });
 };
 
-export const refreshExpiry = () => {
-  const token = getToken();
-  if (token) {
-    setToken(token);
-  }
+export const getRefreshToken = () => {
+  return Cookies.get(REFRESH_TOKEN_KEY);
+};
+
+export const removeTokens = () => {
+  Cookies.remove(TOKEN_KEY);
+  Cookies.remove(REFRESH_TOKEN_KEY);
 };
