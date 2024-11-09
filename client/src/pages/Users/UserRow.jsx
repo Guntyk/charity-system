@@ -25,11 +25,11 @@ export const UserRow = ({ user: { id, name, email, role }, setChangedRoles, inde
   }, [currentRole]);
 
   return (
-    <tr>
+    <>
       <td>{index + 1}</td>
       <td>{name}</td>
       <td>{email}</td>
-      <td className={styles.role}>
+      <td className={styles.dropdown}>
         <Dropdown
           options={rolesOptions}
           selectedOption={currentRole}
@@ -37,6 +37,6 @@ export const UserRow = ({ user: { id, name, email, role }, setChangedRoles, inde
           tableCellStyle
         />
       </td>
-    </tr>
+    </>
   );
 };

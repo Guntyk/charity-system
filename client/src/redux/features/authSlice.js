@@ -74,6 +74,9 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(registerUser.rejected, (state, action) => {
+        state.error = action.payload || 'Registration failed';
+      })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.token = action.payload;
         state.isAuthenticated = true;

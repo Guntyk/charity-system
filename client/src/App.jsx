@@ -2,6 +2,7 @@ import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { routes } from 'constants/routes';
 import { PrivateRoute } from 'components/PrivateRoute';
+import { Notification } from 'components/Notification';
 import { AuthWatcher } from 'components/AuthWatcher';
 import { Sidebar } from 'components/Sidebar';
 import { Header } from 'components/Header';
@@ -38,6 +39,7 @@ export default function App() {
           </Switch>
         </main>
       </div>
+      <Notification />
     </div>
   );
 }

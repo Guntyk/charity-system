@@ -18,7 +18,7 @@
 .modal {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: $gapMedium;
   padding: 4rem;
   position: fixed;
   left: 50%;
@@ -27,7 +27,7 @@
   max-height: 95dvh;
   translate: -50% -50%;
   pointer-events: none;
-  border-radius: 0.8rem;
+  border-radius: $borderRadius;
   background: $white;
   transition: 0.3s;
 

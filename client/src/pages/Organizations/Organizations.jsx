@@ -1,15 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { useSelectable } from 'hooks/useSelectable';
 import { getOrganizations, deleteOrganizations } from '@redux/features/organizationsSlice';
 import { addNotification } from '@redux/features/notificationsSlice';
-import { Notification } from 'components/Notification';
+import { NoResults } from 'components/NoResults';
 import { Button } from 'components/Button';
+import { Table } from 'components/Table';
 import { Create } from 'pages/Organizations/Create';
 import styles from 'pages/Organizations/Organizations.scss';
 
 export const Organizations = ({ setIsLoading }) => {
   const { error, organizations, isLoading } = useSelector((state) => state.organizations);
-  const [selectedOrganizationsIDs, setSelectedOrganizationsIDs] = useState([]);
+  const { selectedIDs, toggleSelection, clearSelection } = useSelectable();
   const [isCreateWindowOpen, setIsCreateWindowOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -37,8 +39,8 @@ export const Organizations = ({ setIsLoading }) => {
   }, [isLoading]);
 
   const handleDelete = async () => {
-    if (selectedOrganizationsIDs.length > 0) {
-      const result = await dispatch(deleteOrganizations(selectedOrganizationsIDs));
+    if (selectedIDs.length > 0) {
+      const result = await dispatch(deleteOrganizations(selectedIDs));
 
       if (result.meta.requestStatus === 'fulfilled') {
         dispatch(
@@ -49,50 +51,42 @@ export const Organizations = ({ setIsLoading }) => {
             type: 'success',
           })
         );
-        setSelectedOrganizationsIDs([]);
+        clearSelection();
       }
     }
   };
 
-  const toggleSelection = (id) => {
-    setSelectedOrganizationsIDs((prev) => (prev.includes(id) ? prev.filter((orgId) => orgId !== id) : [...prev, id]));
-  };
-
   return (
-    <section>
+    <>
       <div className={styles.buttons}>
         <Button text='Create' onClick={() => setIsCreateWindowOpen(true)} />
-        <Button text='Delete' onClick={handleDelete} ghostStyle disabled={selectedOrganizationsIDs.length === 0} />
+        <Button text='Delete' onClick={handleDelete} ghostStyle disabled={selectedIDs.length === 0} />
       </div>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Manager</th>
-            <th>Phone number</th>
-          </tr>
-        </thead>
-        <tbody>
-          {organizations.map(({ id, name, contact_person, phone_number }, index) => (
-            <tr key={id}>
+      {organizations.length > 0 ? (
+        <Table
+          columns={[
+            { key: 'checkbox', label: '' },
+            { key: 'name', label: 'Name' },
+            { key: 'contact_person', label: 'Manager' },
+            { key: 'phone_number', label: 'Phone number' },
+          ]}
+          data={organizations}
+          renderRow={({ id, name, contact_person, phone_number }, index) => (
+            <>
               <td>
-                <input
-                  type='checkbox'
-                  checked={selectedOrganizationsIDs.includes(id)}
-                  onChange={() => toggleSelection(id)}
-                />
+                <input type='checkbox' checked={selectedIDs.includes(id)} onChange={() => toggleSelection(id)} />
                 {index + 1}
               </td>
               <td>{name}</td>
               <td>{contact_person}</td>
               <td>{phone_number}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </>
+          )}
+        />
+      ) : (
+        !isLoading && <NoResults />
+      )}
       <Create isOpen={isCreateWindowOpen} setIsOpen={setIsCreateWindowOpen} />
-      <Notification />
-    </section>
+    </>
   );
 };

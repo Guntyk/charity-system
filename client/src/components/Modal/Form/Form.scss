@@ -6,7 +6,7 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: $gapExtraSmall;
   width: 40rem;
   font-size: 1.8rem;
 }
@@ -14,8 +14,8 @@
 .buttons {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  margin-top: 0.8rem;
+  gap: $gapExtraSmall;
+  margin-top: $gapExtraSmall;
 }
 
 .btn {

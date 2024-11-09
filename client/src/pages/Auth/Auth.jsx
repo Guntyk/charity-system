@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
+import { addNotification } from '@redux/features/notificationsSlice';
 import { validateField } from 'helpers/validateField';
-import { Notification } from 'components/Notification';
 import { Button } from 'components/Button';
 import { Input } from 'components/Input';
 import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -17,9 +17,9 @@ export const Auth = () => {
   const [isFormValid, setIsFormValid] = useState(true);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  const dispatch = useDispatch();
-  const { replace } = useHistory();
   const { isAuthenticated, error } = useSelector((state) => state.auth);
+  const { replace } = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,6 +27,19 @@ export const Auth = () => {
       replace('/');
     }
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (error) {
+      dispatch(
+        addNotification({
+          id: Date.now(),
+          title: `${isLogin ? 'Login' : 'Registration'} error`,
+          text: error,
+          type: 'error',
+        })
+      );
+    }
+  }, [error]);
 
   useEffect(() => {
     setFormData({ email: '', password: '', name: '', role: 1 });
@@ -120,7 +133,6 @@ export const Auth = () => {
           {isLogin ? "Don't" : 'Already'} have an account?{' '}
           <span onClick={() => setIsLogin(!isLogin)}>{isLogin ? 'Create account' : 'Sign In'}</span>
         </p>
-        {error && <Notification title='Registration error' text={error} type='error' flyStyle />}
       </form>
     </section>
   );

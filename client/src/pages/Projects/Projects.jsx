@@ -2,20 +2,21 @@ import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { useSelectable } from 'hooks/useSelectable';
 import { getProjects, deleteProjects } from '@redux/features/projectsSlice';
 import { getOrganizations } from '@redux/features/organizationsSlice';
 import { addNotification } from '@redux/features/notificationsSlice';
-import styles from 'pages/Projects/Projects.scss';
-import { Button } from 'components/Button';
-import { Notification } from 'components/Notification';
-import { Create } from 'pages/Projects/Create';
-import { Dropdown } from 'components/Dropdown';
 import { NoResults } from 'components/NoResults';
+import { Dropdown } from 'components/Dropdown';
+import { Button } from 'components/Button';
+import { Table } from 'components/Table';
+import { Create } from 'pages/Projects/Create';
+import styles from 'pages/Projects/Projects.scss';
 
 export const Projects = ({ setIsLoading }) => {
   const { organizations, isLoading: isOrganizationsLoading } = useSelector((state) => state.organizations);
   const { error, projects, isLoading: isProjectsLoading } = useSelector((state) => state.projects);
-  const [selectedProjectsIDs, setSelectedProjectsIDs] = useState([]);
+  const { selectedIDs, toggleSelection, clearSelection } = useSelectable();
   const [isCreateWindowOpen, setIsCreateWindowOpen] = useState(false);
   const [organizationFilter, setOrganizationFilter] = useState(null);
   const [projectsList, setProjectsList] = useState([]);
@@ -63,8 +64,8 @@ export const Projects = ({ setIsLoading }) => {
   }, [organizationFilter]);
 
   const handleDelete = async () => {
-    if (selectedProjectsIDs.length > 0) {
-      const result = await dispatch(deleteProjects(selectedProjectsIDs));
+    if (selectedIDs.length > 0) {
+      const result = await dispatch(deleteProjects(selectedIDs));
 
       if (result.meta.requestStatus === 'fulfilled') {
         dispatch(
@@ -75,15 +76,9 @@ export const Projects = ({ setIsLoading }) => {
             type: 'success',
           })
         );
-        setSelectedProjectsIDs([]);
+        clearSelection();
       }
     }
-  };
-
-  const toggleSelection = (id) => {
-    setSelectedProjectsIDs((prev) =>
-      prev.includes(id) ? prev.filter((projectID) => projectID !== id) : [...prev, id]
-    );
   };
 
   const clearFilter = () => {
@@ -92,10 +87,10 @@ export const Projects = ({ setIsLoading }) => {
   };
 
   return (
-    <section className={styles.page}>
+    <>
       <div className={styles.buttons}>
         <Button text='Create' onClick={() => setIsCreateWindowOpen(true)} />
-        <Button text='Delete' onClick={handleDelete} ghostStyle disabled={selectedProjectsIDs.length === 0} />
+        <Button text='Delete' onClick={handleDelete} ghostStyle disabled={selectedIDs.length === 0} />
       </div>
       <div className={styles.search}>
         <Dropdown
@@ -106,8 +101,8 @@ export const Projects = ({ setIsLoading }) => {
             value: id,
           }))}
           placeholder='Select organization'
-          selectedValue={organizationFilter}
-          setSelectedValue={(selectedOption) => setOrganizationFilter(selectedOption)}
+          selectedOption={organizationFilter}
+          setSelectedOption={(selectedOption) => setOrganizationFilter(selectedOption)}
         />
         <Button onClick={clearFilter} ghostStyle roundStyle no3D>
           <FontAwesomeIcon icon={faXmark} />
@@ -117,42 +112,32 @@ export const Projects = ({ setIsLoading }) => {
         )}
       </div>
       {projectsList.length > 0 ? (
-        <div className={styles.tableContainer}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Organization</th>
-                <th>Costs</th>
-                <th>Revenue</th>
-              </tr>
-            </thead>
-            <tbody>
-              {projectsList.map(({ id, name, organizationID, costs, revenue }, index) => (
-                <tr key={id}>
-                  <td>
-                    <input
-                      type='checkbox'
-                      checked={selectedProjectsIDs.includes(id)}
-                      onChange={() => toggleSelection(id)}
-                    />
-                    {index + 1}
-                  </td>
-                  <td>{name}</td>
-                  <td>{organizations.find(({ id }) => id === organizationID)?.name}</td>
-                  <td>${costs}</td>
-                  <td>${revenue}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          columns={[
+            { key: 'checkbox', label: '' },
+            { key: 'name', label: 'Name' },
+            { key: 'organization', label: 'Organization' },
+            { key: 'costs', label: 'Costs' },
+            { key: 'revenue', label: 'Revenue' },
+          ]}
+          data={projectsList}
+          renderRow={({ id, name, organizationID, costs, revenue }, index) => (
+            <>
+              <td>
+                <input type='checkbox' checked={selectedIDs.includes(id)} onChange={() => toggleSelection(id)} />
+                {index + 1}
+              </td>
+              <td>{name}</td>
+              <td>{organizations.find(({ id }) => id === organizationID)?.name}</td>
+              <td>${costs}</td>
+              <td>${revenue}</td>
+            </>
+          )}
+        />
       ) : (
         !isLoading && <NoResults text='This organization has no projects' />
       )}
       <Create isOpen={isCreateWindowOpen} setIsOpen={setIsCreateWindowOpen} />
-      <Notification />
-    </section>
+    </>
   );
 };

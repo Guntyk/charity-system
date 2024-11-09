@@ -9,7 +9,7 @@
   letter-spacing: 0.1rem;
   text-transform: uppercase;
   border: 0.2rem solid $primaryDark;
-  border-radius: 0.8rem;
+  border-radius: $borderRadius;
   background: $primary1;
   transform-style: preserve-3d;
   transition: $transition;

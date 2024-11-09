@@ -8,30 +8,30 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: $gapExtraSmall;
   max-width: 30rem;
   width: 100%;
 }
 
 .title {
-  margin-bottom: 1.6rem;
+  margin-bottom: $gapMedium;
   font-size: 3.2rem;
   font-weight: map-get($fontWeights, 'medium');
 }
 
 .input {
   background-color: #eee;
-  padding: 0.8rem 1.6rem;
+  padding: $gapExtraSmall $gapMedium;
   font-size: 1.6rem;
-  border-radius: 0.8rem;
+  border-radius: $borderRadius;
 }
 
 .btn {
-  margin-top: 1.6rem;
+  margin-top: $gapMedium;
 }
 
 .authLink {
-  margin-top: 0.8rem;
+  margin-top: $gapExtraSmall;
   font-size: 1.4rem;
   color: $gray1;
 

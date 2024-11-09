@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import cn from 'classnames';
+import { useEffect, useState } from 'react';
 import { getUsers, updateUserRoles } from '@redux/features/usersSlice';
 import { addNotification } from '@redux/features/notificationsSlice';
-import { Notification } from 'components/Notification';
+import { NoResults } from 'components/NoResults';
 import { Button } from 'components/Button';
+import { Table } from 'components/Table';
 import { UserRow } from 'pages/Users/UserRow';
 import styles from 'pages/Users/Users.scss';
 
 export const Users = ({ setIsLoading }) => {
   const { error, users, isLoading } = useSelector((state) => state.users);
-  const dispatch = useDispatch();
   const [changedRoles, setChangedRoles] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!users.length) {
@@ -55,32 +55,30 @@ export const Users = ({ setIsLoading }) => {
   };
 
   return (
-    <section>
+    <>
       <div className={styles.buttons}>
-        <div className={cn(styles.saveBtn, { [styles.active]: Object.values(changedRoles).length > 0 })}>
-          <Button
-            text='Save changes'
-            onClick={handleSaveRoles}
-            disabled={!Object.values(changedRoles).length || (users.length > 0 && isLoading)}
-          />
-        </div>
+        <Button
+          text='Save changes'
+          onClick={handleSaveRoles}
+          disabled={!Object.values(changedRoles).length || (users.length > 0 && isLoading)}
+        />
       </div>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
+      {users.length > 0 ? (
+        <Table
+          columns={[
+            { key: 'checkbox', label: '' },
+            { key: 'name', label: 'Name' },
+            { key: 'email', label: 'Email' },
+            { key: 'role', label: 'Role' },
+          ]}
+          data={users}
+          renderRow={(user, index) => (
             <UserRow user={user} index={index} setChangedRoles={setChangedRoles} key={user.id} />
-          ))}
-        </tbody>
-      </table>
-      <Notification position='bottom-right' />
-    </section>
+          )}
+        />
+      ) : (
+        !isLoading && <NoResults />
+      )}
+    </>
   );
 };

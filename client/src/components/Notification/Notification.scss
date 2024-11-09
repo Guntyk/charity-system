@@ -3,7 +3,7 @@
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: $gapExtraSmall;
 
   &.bottom-right {
     bottom: 3rem;
@@ -19,13 +19,13 @@
 .notification {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: $gapExtraSmall;
   padding: 1.2rem 0.8rem;
   font-size: 1.6rem;
   background: $white;
   border: 0.1rem solid $lightGray;
   border-left: 0.4rem solid $primary1;
-  border-radius: 0.8rem;
+  border-radius: $borderRadius;
   transition: opacity 0.3s ease-in-out;
   animation: slide-in 0.5s ease, fade-out 0.5s ease 4.5s forwards;
 
@@ -46,7 +46,7 @@
 }
 
 .text {
-  margin-top: 0.8rem;
+  margin-top: $gapExtraSmall;
 }
 
 .closeButton {
