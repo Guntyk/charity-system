@@ -4,30 +4,30 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { useSelectable } from 'hooks/useSelectable';
-import { getProjects, deleteProjects } from '@redux/features/projectsSlice';
+import { getVolunteers, deleteVolunteers } from '@redux/features/volunteersSlice';
 import { getOrganizations } from '@redux/features/organizationsSlice';
 import { addNotification } from '@redux/features/notificationsSlice';
 import { NoResults } from 'components/NoResults';
 import { Dropdown } from 'components/Dropdown';
 import { Button } from 'components/Button';
 import { Table } from 'components/Table';
-import { Create } from 'pages/Projects/Create';
-import styles from 'pages/Projects/Projects.scss';
+import { Create } from 'pages/Volunteers/Create';
+import styles from 'pages/Volunteers/Volunteers.scss';
 
-export const Projects = ({ setIsLoading }) => {
+export const Volunteers = ({ setIsLoading }) => {
   const { organizations, isLoading: isOrganizationsLoading } = useSelector((state) => state.organizations);
-  const { error, projects, isLoading: isProjectsLoading } = useSelector((state) => state.projects);
+  const { error, volunteers, isLoading: isVolunteersLoading } = useSelector((state) => state.volunteers);
   const { selectedIDs, toggleSelection, clearSelection } = useSelectable();
   const [isCreateWindowOpen, setIsCreateWindowOpen] = useState(false);
   const [organizationFilter, setOrganizationFilter] = useState(null);
-  const [projectsList, setProjectsList] = useState([]);
+  const [volunteersList, setVolunteersList] = useState([]);
   const dispatch = useDispatch();
 
-  const isLoading = isProjectsLoading || isOrganizationsLoading;
+  const isLoading = isOrganizationsLoading || isVolunteersLoading;
 
   useEffect(() => {
-    if (!projects.length) {
-      dispatch(getProjects());
+    if (!volunteers.length) {
+      dispatch(getVolunteers());
     }
     if (!organizations.length) {
       dispatch(getOrganizations());
@@ -35,17 +35,17 @@ export const Projects = ({ setIsLoading }) => {
   }, []);
 
   useEffect(() => {
-    if (projects.length) {
-      setProjectsList(projects);
+    if (volunteers.length) {
+      setVolunteersList(volunteers);
     }
-  }, [projects]);
+  }, [volunteers]);
 
   useEffect(() => {
     if (error) {
       dispatch(
         addNotification({
           id: Date.now(),
-          title: 'Error!',
+          title: 'Error',
           text: error,
           type: 'error',
         })
@@ -59,14 +59,16 @@ export const Projects = ({ setIsLoading }) => {
 
   useEffect(() => {
     if (organizationFilter) {
-      const filteredProjects = projects.filter(({ organizationID }) => organizationID === organizationFilter?.value);
-      setProjectsList(filteredProjects);
+      const filteredVolunteers = volunteers.filter(
+        ({ organizationID }) => organizationID === organizationFilter?.value
+      );
+      setVolunteersList(filteredVolunteers);
     }
   }, [organizationFilter]);
 
   const handleDelete = async () => {
     if (selectedIDs.length > 0) {
-      const result = await dispatch(deleteProjects(selectedIDs));
+      const result = await dispatch(deleteVolunteers(selectedIDs));
 
       if (result.meta.requestStatus === 'fulfilled') {
         dispatch(
@@ -83,7 +85,7 @@ export const Projects = ({ setIsLoading }) => {
   };
 
   const clearFilter = () => {
-    setProjectsList(projects);
+    setVolunteersList(volunteers);
     setOrganizationFilter(null);
   };
 
@@ -114,35 +116,35 @@ export const Projects = ({ setIsLoading }) => {
         >
           <FontAwesomeIcon icon={faXmark} />
         </Button>
-        {organizationFilter && projectsList.length > 0 && (
-          <p className={styles.listLength}>Found {projectsList.length} entries</p>
+        {organizationFilter && volunteersList.length > 0 && (
+          <p className={styles.listLength}>Found {volunteersList.length} entries</p>
         )}
       </div>
-      {projectsList.length > 0 ? (
+      {volunteersList.length > 0 ? (
         <Table
           columns={[
             { key: 'checkbox', label: '' },
             { key: 'name', label: 'Name' },
+            { key: 'email', label: 'Email' },
+            { key: 'phone', label: 'Phone' },
             { key: 'organization', label: 'Organization' },
-            { key: 'costs', label: 'Costs' },
-            { key: 'revenue', label: 'Revenue' },
           ]}
-          data={projectsList}
-          renderRow={({ id, name, organizationID, costs, revenue }, index) => (
+          data={volunteersList}
+          renderRow={({ id, name, email, phoneNumber, organizationID }, index) => (
             <>
               <td>
                 <input type='checkbox' checked={selectedIDs.includes(id)} onChange={() => toggleSelection(id)} />
                 {index + 1}
               </td>
               <td>{name}</td>
+              <td>{email}</td>
+              <td>{phoneNumber}</td>
               <td>{organizations.find(({ id }) => id === organizationID)?.name}</td>
-              <td>${costs}</td>
-              <td>${revenue}</td>
             </>
           )}
         />
       ) : (
-        !isLoading && <NoResults text='This organization has no projects' />
+        !isLoading && <NoResults text='This organization has no volunteers' />
       )}
       <Create isOpen={isCreateWindowOpen} setIsOpen={setIsCreateWindowOpen} />
     </>

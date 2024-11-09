@@ -9,7 +9,6 @@ export const Create = ({ isOpen, setIsOpen }) => {
   const fields = [
     {
       name: 'name',
-      label: 'Organization Name',
       type: 'text',
       placeholder: 'Enter organization name',
       icon: faScroll,
@@ -17,7 +16,6 @@ export const Create = ({ isOpen, setIsOpen }) => {
     },
     {
       name: 'manager',
-      label: 'Manager Name',
       type: 'text',
       placeholder: "Enter manager's full name",
       icon: faUser,
@@ -25,7 +23,6 @@ export const Create = ({ isOpen, setIsOpen }) => {
     },
     {
       name: 'phoneNumber',
-      label: 'Phone Number',
       type: 'text',
       placeholder: 'Enter phone number',
       icon: faPhone,

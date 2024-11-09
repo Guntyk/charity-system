@@ -82,8 +82,8 @@ export const Form = ({ isOpen, setIsOpen, title, fields, onSubmit }) => {
                 icon={icon}
                 options={options}
                 placeholder={placeholder}
-                selectedValue={options.find((opt) => opt.value === formData[name])}
-                setSelectedValue={(option) => handleChange(name, option.value, validate)}
+                selectedOption={options.find((opt) => opt.value === formData[name])}
+                setSelectedOption={(option) => handleChange(name, option.value, validate)}
               />
             )}
           </React.Fragment>

@@ -23,7 +23,6 @@ export const Create = ({ isOpen, setIsOpen }) => {
   const fields = [
     {
       name: 'name',
-      label: 'Project Name',
       type: 'text',
       placeholder: 'Enter project name',
       icon: faScroll,
@@ -31,7 +30,6 @@ export const Create = ({ isOpen, setIsOpen }) => {
     },
     {
       name: 'organizationID',
-      label: 'Organization',
       type: 'dropdown',
       placeholder: 'Select organization',
       options: organizationOptions,

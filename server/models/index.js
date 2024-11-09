@@ -6,17 +6,22 @@ const Volunteer = require('./Volunteer');
 const Admin = require('./Admin');
 const User = require('./User');
 
-Organization.hasMany(Project, { foreignKey: 'organization_id' });
-Project.belongsTo(Organization, { foreignKey: 'organization_id' });
+Organization.hasMany(Project, { foreignKey: 'organizationID' });
+Project.belongsTo(Organization, { foreignKey: 'organizationID' });
 
-Project.hasMany(Volunteer, { foreignKey: 'project_id' });
-Volunteer.belongsTo(Project, { foreignKey: 'project_id' });
+Organization.hasMany(Volunteer, { foreignKey: 'organizationID' });
+Volunteer.belongsTo(Organization, { foreignKey: 'organizationID' });
 
-Project.hasMany(Donation, { foreignKey: 'project_id' });
-Donation.belongsTo(Project, { foreignKey: 'project_id' });
+const ProjectVolunteer = sequelize.define('ProjectVolunteer', {}, { timestamps: false });
 
-Volunteer.hasMany(Donation, { foreignKey: 'vol_id' });
-Donation.belongsTo(Volunteer, { foreignKey: 'vol_id' });
+Project.belongsToMany(Volunteer, { through: ProjectVolunteer, foreignKey: 'projectID' });
+Volunteer.belongsToMany(Project, { through: ProjectVolunteer, foreignKey: 'volunteerID' });
+
+Project.hasMany(Donation, { foreignKey: 'projectID' });
+Donation.belongsTo(Project, { foreignKey: 'projectID' });
+
+Volunteer.hasMany(Donation, { foreignKey: 'volunteerID' });
+Donation.belongsTo(Volunteer, { foreignKey: 'volunteerID' });
 
 module.exports = {
   sequelize,
@@ -26,4 +31,5 @@ module.exports = {
   Volunteer,
   Admin,
   User,
+  ProjectVolunteer,
 };
