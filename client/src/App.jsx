@@ -2,11 +2,11 @@ import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { routes } from 'constants/routes';
 import { PrivateRoute } from 'components/PrivateRoute';
+import { AuthWatcher } from 'components/AuthWatcher';
 import { Sidebar } from 'components/Sidebar';
 import { Header } from 'components/Header';
 import { Auth } from 'pages/Auth';
 import styles from 'App.scss';
-import { AuthWatcher } from 'components/AuthWatcher';
 
 export default function App() {
   const [headerTitle, setHeaderTitle] = useState('');

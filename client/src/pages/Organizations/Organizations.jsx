@@ -61,7 +61,7 @@ export const Organizations = ({ setIsLoading }) => {
   return (
     <section>
       <div className={styles.buttons}>
-        <Button text='Create' onClick={() => setIsCreateWindowOpen(true)} disabled={false} />
+        <Button text='Create' onClick={() => setIsCreateWindowOpen(true)} />
         <Button text='Delete' onClick={handleDelete} ghostStyle disabled={selectedOrganizationsIDs.length === 0} />
       </div>
       <table className={styles.table}>

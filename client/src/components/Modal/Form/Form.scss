@@ -1,0 +1,23 @@
+.title {
+  font-size: 2.4rem;
+  font-weight: map-get($fontWeights, 'medium');
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 40rem;
+  font-size: 1.8rem;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.btn {
+  flex-grow: 1;
+}

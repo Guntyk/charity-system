@@ -14,7 +14,7 @@ const Project = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    organization_id: {
+    organizationID: {
       type: DataTypes.INTEGER,
       references: {
         model: Organization,
@@ -22,13 +22,20 @@ const Project = sequelize.define(
       },
       allowNull: false,
     },
-    amount: {
+    costs: {
       type: DataTypes.DECIMAL(15, 2),
       allowNull: false,
+      defaultValue: 0.0,
+    },
+    revenue: {
+      type: DataTypes.DECIMAL(15, 2),
+      allowNull: false,
+      defaultValue: 0.0,
     },
   },
   {
     tableName: 'projects',
+    timestamps: true,
   }
 );
 

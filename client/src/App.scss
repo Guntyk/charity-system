@@ -3,7 +3,8 @@
 }
 
 .pages {
-  width: 100%;
+  width: calc(100% - 15rem);
+  overflow: hidden;
 }
 
 .page {

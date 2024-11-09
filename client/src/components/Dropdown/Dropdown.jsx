@@ -1,10 +1,21 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, useState, useEffect } from 'react';
 import cn from 'classnames';
 import styles from 'components/Dropdown/Dropdown.scss';
 
-export const Dropdown = ({ className, options, placeholder, selectedValue, setSelectedValue, tableCellStyle }) => {
+export const Dropdown = ({
+  className,
+  icon,
+  options,
+  placeholder,
+  selectedValue,
+  setSelectedValue,
+  tableCellStyle,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  console.log();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -20,7 +31,7 @@ export const Dropdown = ({ className, options, placeholder, selectedValue, setSe
     }
 
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, setIsOpen]);
+  }, [isOpen]);
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
@@ -43,7 +54,8 @@ export const Dropdown = ({ className, options, placeholder, selectedValue, setSe
         aria-controls='dropdown-list'
       >
         <span className={cn(styles.text, { [styles.placeholder]: !selectedValue })}>
-          {selectedValue || placeholder}
+          <FontAwesomeIcon className={styles.icon} icon={icon} />
+          <span>{selectedValue?.label || placeholder}</span>
         </span>
         <span className={cn(styles.arrow, { [styles.open]: isOpen })} />
       </button>
@@ -53,14 +65,14 @@ export const Dropdown = ({ className, options, placeholder, selectedValue, setSe
             type='button'
             role='option'
             className={cn(styles.dropdownItem, {
-              [styles.selectedItem]: option === selectedValue,
+              [styles.selectedItem]: option.value === selectedValue?.value,
             })}
             onClick={() => handleSelectOption(option)}
-            aria-selected={option === selectedValue}
-            tabIndex={isOpen && option !== selectedValue ? '0' : '-1'}
-            key={option}
+            aria-selected={option.value === selectedValue?.value}
+            tabIndex={isOpen ? 0 : -1}
+            key={option.value}
           >
-            {option}
+            {option.label}
           </button>
         ))}
       </div>

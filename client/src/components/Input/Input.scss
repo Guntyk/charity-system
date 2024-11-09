@@ -4,7 +4,7 @@
 
   &.invalid {
     .inputArea {
-      margin-bottom: 1.8rem;
+      margin-bottom: 2rem;
     }
 
     .input {
@@ -24,6 +24,12 @@
       &Text {
         opacity: 1;
       }
+    }
+  }
+
+  &:not(.invalid) {
+    .roleIcon.filled {
+      color: $primary1;
     }
   }
 }
@@ -92,11 +98,8 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    // display: block;
-    // width: 100%;
-    // min-height: 1rem;
-    // height: min-content;
     opacity: 0;
+    line-height: 1.1;
     transition: 0.2s;
   }
 }

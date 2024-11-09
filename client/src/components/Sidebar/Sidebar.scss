@@ -48,7 +48,7 @@
     }
 
     .tooltip {
-      transition-delay: 0.2s;
+      transition-delay: 0.3s;
       visibility: visible;
       opacity: 1;
       transform: translateX(-0.25rem) translateY(-50%);
@@ -87,8 +87,10 @@
   opacity: 0;
   visibility: hidden;
   background-color: $primary1;
+  border: 0.1rem solid $primaryDark;
   transform: translateX(0.25rem) translateY(-50%);
   transition: 0.2s;
+  z-index: 1;
 }
 
 .accountWrapper {

@@ -5,11 +5,10 @@ import cn from 'classnames';
 import { clearAllNotifications } from '@redux/features/notificationsSlice';
 import { routes } from 'constants/routes';
 import { Account } from 'components/Sidebar/Account';
-import { Button } from 'components/Button';
 import styles from 'components/Sidebar/Sidebar.scss';
 
 export const Sidebar = ({ setHeaderTitle }) => {
-  const { isAuthenticated, token } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { push } = useHistory();
@@ -50,7 +49,7 @@ export const Sidebar = ({ setHeaderTitle }) => {
               )}
             </ul>
           </nav>
-          {token && <Account setHeaderTitle={setHeaderTitle} />}
+          <Account setHeaderTitle={setHeaderTitle} />
         </>
       )}
     </aside>

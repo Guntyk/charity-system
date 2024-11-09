@@ -1,0 +1,15 @@
+.noResults {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: min-content;
+  padding: 1.25rem 1.6rem;
+  font-size: 1.8rem;
+  border-radius: 0.8rem;
+  border: 0.1rem solid $gray;
+  white-space: nowrap;
+}
+
+.icon {
+  color: $red;
+}
