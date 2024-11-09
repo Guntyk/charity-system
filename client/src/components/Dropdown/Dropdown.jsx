@@ -8,14 +8,12 @@ export const Dropdown = ({
   icon,
   options,
   placeholder,
-  selectedValue,
-  setSelectedValue,
+  selectedOption,
+  setSelectedOption,
   tableCellStyle,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
-  console.log();
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -36,7 +34,7 @@ export const Dropdown = ({
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
   const handleSelectOption = (option) => {
-    setSelectedValue(option);
+    setSelectedOption(option);
     setIsOpen(false);
   };
 
@@ -46,16 +44,16 @@ export const Dropdown = ({
         type='button'
         className={cn(styles.dropdownButton, {
           [styles.open]: isOpen,
-          [styles.filled]: selectedValue,
+          [styles.filled]: selectedOption,
         })}
         onClick={toggleDropdown}
         aria-expanded={isOpen}
         aria-haspopup='listbox'
         aria-controls='dropdown-list'
       >
-        <span className={cn(styles.text, { [styles.placeholder]: !selectedValue })}>
-          <FontAwesomeIcon className={styles.icon} icon={icon} />
-          <span>{selectedValue?.label || placeholder}</span>
+        <span className={cn(styles.text, { [styles.placeholder]: !selectedOption })}>
+          {icon && <FontAwesomeIcon className={styles.icon} icon={icon} />}
+          <span>{selectedOption?.label || placeholder}</span>
         </span>
         <span className={cn(styles.arrow, { [styles.open]: isOpen })} />
       </button>
@@ -65,10 +63,10 @@ export const Dropdown = ({
             type='button'
             role='option'
             className={cn(styles.dropdownItem, {
-              [styles.selectedItem]: option.value === selectedValue?.value,
+              [styles.selectedItem]: option.value === selectedOption?.value,
             })}
             onClick={() => handleSelectOption(option)}
-            aria-selected={option.value === selectedValue?.value}
+            aria-selected={option.value === selectedOption?.value}
             tabIndex={isOpen ? 0 : -1}
             key={option.value}
           >

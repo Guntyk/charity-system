@@ -3,17 +3,18 @@ import { Dropdown } from 'components/Dropdown';
 import styles from 'pages/Users/Users.scss';
 
 export const UserRow = ({ user: { id, name, email, role }, setChangedRoles, index }) => {
-  const [currentRole, setCurrentRole] = useState(role === 1 ? 'User' : 'Admin');
-  const originalRole = role === 1 ? 'User' : 'Admin';
+  const rolesOptions = [
+    { label: 'User', value: 1 },
+    { label: 'Admin', value: 2 },
+  ];
+  const originalRole = rolesOptions.find(({ value }) => value === role);
+  const [currentRole, setCurrentRole] = useState(originalRole);
 
   useEffect(() => {
-    const newRoleValue = currentRole === 'User' ? 1 : 2;
-    const originalRoleValue = originalRole === 'User' ? 1 : 2;
-
-    if (newRoleValue !== originalRoleValue) {
+    if (currentRole.value !== originalRole.value) {
       setChangedRoles((prev) => ({
         ...prev,
-        [id]: newRoleValue,
+        [id]: currentRole.value,
       }));
     } else {
       setChangedRoles((prev) => {
@@ -21,7 +22,7 @@ export const UserRow = ({ user: { id, name, email, role }, setChangedRoles, inde
         return rest;
       });
     }
-  }, [currentRole, originalRole, id, setChangedRoles]);
+  }, [currentRole]);
 
   return (
     <tr>
@@ -30,9 +31,9 @@ export const UserRow = ({ user: { id, name, email, role }, setChangedRoles, inde
       <td>{email}</td>
       <td className={styles.role}>
         <Dropdown
-          options={['User', 'Admin']}
-          selectedValue={currentRole}
-          setSelectedValue={setCurrentRole}
+          options={rolesOptions}
+          selectedOption={currentRole}
+          setSelectedOption={setCurrentRole}
           tableCellStyle
         />
       </td>
