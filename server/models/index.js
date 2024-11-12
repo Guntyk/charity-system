@@ -1,7 +1,7 @@
 const sequelize = require('../config/database');
 const Organization = require('./Organization');
 const Project = require('./Project');
-const Donation = require('./Donation');
+const Transaction = require('./Transaction');
 const Volunteer = require('./Volunteer');
 const Admin = require('./Admin');
 const User = require('./User');
@@ -17,17 +17,17 @@ const ProjectVolunteer = sequelize.define('ProjectVolunteer', {}, { timestamps: 
 Project.belongsToMany(Volunteer, { through: ProjectVolunteer, foreignKey: 'projectID' });
 Volunteer.belongsToMany(Project, { through: ProjectVolunteer, foreignKey: 'volunteerID' });
 
-Project.hasMany(Donation, { foreignKey: 'projectID' });
-Donation.belongsTo(Project, { foreignKey: 'projectID' });
+Project.hasMany(Transaction, { foreignKey: 'projectID' });
+Transaction.belongsTo(Project, { foreignKey: 'projectID' });
 
-Volunteer.hasMany(Donation, { foreignKey: 'volunteerID' });
-Donation.belongsTo(Volunteer, { foreignKey: 'volunteerID' });
+Volunteer.hasMany(Transaction, { foreignKey: 'volunteerID' });
+Transaction.belongsTo(Volunteer, { foreignKey: 'volunteerID' });
 
 module.exports = {
   sequelize,
   Organization,
   Project,
-  Donation,
+  Transaction,
   Volunteer,
   Admin,
   User,

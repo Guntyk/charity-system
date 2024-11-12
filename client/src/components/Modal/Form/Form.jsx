@@ -64,12 +64,14 @@ export const Form = ({ isOpen, setIsOpen, title, fields, onSubmit }) => {
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <span className={styles.title}>{title}</span>
       <form className={styles.form} onSubmit={handleSubmit}>
-        {fields.map(({ name, type, placeholder, icon, options, validate }) => (
+        {fields.map(({ name, type, placeholder, icon, options, validate, inputMode, inputType }) => (
           <React.Fragment key={name}>
             {type === 'text' && (
               <Input
                 value={formData?.[name] || ''}
                 name={name}
+                type={inputType}
+                inputMode={inputMode}
                 placeholder={placeholder}
                 icon={icon}
                 errorText={errors?.[name]}
@@ -84,6 +86,8 @@ export const Form = ({ isOpen, setIsOpen, title, fields, onSubmit }) => {
                 placeholder={placeholder}
                 selectedOption={options.find((opt) => opt.value === formData[name])}
                 setSelectedOption={(option) => handleChange(name, option.value, validate)}
+                errorText={errors?.[name]}
+                invalid={hasSubmitted && !!errors?.[name]}
               />
             )}
           </React.Fragment>

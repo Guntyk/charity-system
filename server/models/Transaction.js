@@ -3,15 +3,15 @@ const sequelize = require('../config/database');
 const Volunteer = require('./Volunteer');
 const Project = require('./Project');
 
-const Donation = sequelize.define(
-  'Donation',
+const Transaction = sequelize.define(
+  'Transaction',
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    vol_id: {
+    volunteerID: {
       type: DataTypes.INTEGER,
       references: {
         model: Volunteer,
@@ -19,7 +19,7 @@ const Donation = sequelize.define(
       },
       allowNull: false,
     },
-    project_id: {
+    projectID: {
       type: DataTypes.INTEGER,
       references: {
         model: Project,
@@ -27,14 +27,25 @@ const Donation = sequelize.define(
       },
       allowNull: false,
     },
-    donation: {
+    transactionType: {
+      type: DataTypes.ENUM('deposit', 'withdrawal'),
+      allowNull: false,
+      comment: 'Type of transaction: deposit or withdrawal',
+    },
+    amount: {
       type: DataTypes.DECIMAL(15, 2),
       allowNull: false,
+      comment: 'Transaction sum',
+    },
+    purpose: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      comment: 'Transaction purpose',
     },
   },
   {
-    tableName: 'donations',
+    tableName: 'transactions',
   }
 );
 
-module.exports = Donation;
+module.exports = Transaction;

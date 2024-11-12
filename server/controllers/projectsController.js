@@ -1,10 +1,47 @@
+const { Sequelize } = require('sequelize');
+const { Transaction } = require('../models');
 const Project = require('../models/Project');
 
 const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.findAll();
+    const projects = await Project.findAll({
+      include: [
+        {
+          model: Transaction,
+          attributes: [],
+        },
+      ],
+      attributes: [
+        'id',
+        'name',
+        'organizationID',
+        [
+          Sequelize.fn(
+            'COALESCE',
+            Sequelize.fn('SUM', Sequelize.literal(`CASE WHEN "transactionType" = 'deposit' THEN "amount" ELSE 0 END`)),
+            0
+          ),
+          'revenue',
+        ],
+
+        [
+          Sequelize.fn(
+            'COALESCE',
+            Sequelize.fn(
+              'SUM',
+              Sequelize.literal(`CASE WHEN "transactionType" = 'withdrawal' THEN "amount" ELSE 0 END`)
+            ),
+            0
+          ),
+          'costs',
+        ],
+      ],
+      group: ['Project.id'],
+    });
+
     res.status(200).json(projects);
   } catch (error) {
+    console.error('Error while getting projects:', error);
     res.status(500).json({ message: 'Error while getting projects', error });
   }
 };

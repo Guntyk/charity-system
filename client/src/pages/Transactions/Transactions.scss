@@ -32,10 +32,10 @@
   font-size: 1.6rem;
 }
 
-.cost {
+.money {
   color: $red;
-}
 
-.revenue {
-  color: $green;
+  &.deposit {
+    color: $green;
+  }
 }

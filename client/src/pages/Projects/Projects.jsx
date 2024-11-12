@@ -126,20 +126,28 @@ export const Projects = ({ setIsLoading }) => {
             { key: 'organization', label: 'Organization' },
             { key: 'costs', label: 'Costs' },
             { key: 'revenue', label: 'Revenue' },
+            { key: 'total', label: 'Total' },
           ]}
           data={projectsList}
-          renderRow={({ id, name, organizationID, costs, revenue }, index) => (
-            <>
-              <td>
-                <input type='checkbox' checked={selectedIDs.includes(id)} onChange={() => toggleSelection(id)} />
-                {index + 1}
-              </td>
-              <td>{name}</td>
-              <td>{organizations.find(({ id }) => id === organizationID)?.name}</td>
-              <td>${costs}</td>
-              <td>${revenue}</td>
-            </>
-          )}
+          renderRow={({ id, name, organizationID, costs, revenue }, index) => {
+            const total = revenue - costs;
+
+            return (
+              <>
+                <td>
+                  <input type='checkbox' checked={selectedIDs.includes(id)} onChange={() => toggleSelection(id)} />
+                  {index + 1}
+                </td>
+                <td>{name}</td>
+                <td>{organizations.find(({ id }) => id === organizationID)?.name}</td>
+                <td>{costs ? `-$${Math.abs(costs)}` : '$0'}</td>
+                <td>{revenue ? `+$${Math.abs(revenue)}` : '$0'}</td>
+                <td className={cn({ [styles.cost]: total < 0, [styles.revenue]: total > 0 })}>
+                  {total === 0 ? '$0' : `${total > 0 ? '+' : '-'}$${Math.abs(total)}`}
+                </td>
+              </>
+            );
+          }}
         />
       ) : (
         !isLoading && <NoResults text='This organization has no projects' />
