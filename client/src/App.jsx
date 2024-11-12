@@ -33,7 +33,9 @@ export default function App() {
               ({ id, link, component }) =>
                 component && <PrivateRoute component={component} setIsLoading={setIsLoading} path={link} key={id} />
             )}
-            <Route path='/auth' element={<Auth />} exact />
+            <Route path='/auth' exact>
+              <Auth />
+            </Route>
           </Switch>
         </main>
       </div>

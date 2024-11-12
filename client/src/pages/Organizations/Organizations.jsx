@@ -59,6 +59,11 @@ export const Organizations = ({ setIsLoading }) => {
   return (
     <>
       <div className={styles.buttons}>
+        {selectedIDs.length > 0 && (
+          <p className={styles.text}>
+            Selected {selectedIDs.length} entr{selectedIDs.length > 1 ? 'ies' : 'y'}
+          </p>
+        )}
         <Button text='Create' onClick={() => setIsCreateWindowOpen(true)} />
         <Button text='Delete' onClick={handleDelete} ghostStyle disabled={selectedIDs.length === 0} />
       </div>
@@ -71,10 +76,11 @@ export const Organizations = ({ setIsLoading }) => {
             { key: 'phone_number', label: 'Phone number' },
           ]}
           data={organizations}
+          selectedIDs={selectedIDs}
           renderRow={({ id, name, contact_person, phone_number }, index) => (
             <>
-              <td>
-                <input type='checkbox' checked={selectedIDs.includes(id)} onChange={() => toggleSelection(id)} />
+              <td onClick={() => toggleSelection(id)}>
+                <input type='checkbox' checked={selectedIDs.includes(id)} />
                 {index + 1}
               </td>
               <td>{name}</td>

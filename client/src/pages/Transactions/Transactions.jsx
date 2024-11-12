@@ -1,24 +1,27 @@
+import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
-import { getTransactions, deleteTransactions } from '@redux/features/transactionsSlice';
+import { getTransactions } from '@redux/features/transactionsSlice';
 import { addNotification } from '@redux/features/notificationsSlice';
 import { getVolunteers } from '@redux/features/volunteersSlice';
 import { getProjects } from '@redux/features/projectsSlice';
+import { formatDate } from 'helpers/formatDate';
 import { NoResults } from 'components/NoResults';
+import { Dropdown } from 'components/Dropdown';
 import { Button } from 'components/Button';
 import { Table } from 'components/Table';
 import { Create } from 'pages/Transactions/Create';
 import styles from 'pages/Transactions/Transactions.scss';
-import { formatDate } from 'helpers/formatDate';
 
 export const Transactions = ({ setIsLoading }) => {
   const { volunteers, isLoading: isVolunteersLoading } = useSelector((state) => state.volunteers);
   const { projects, isLoading: isProjectsLoading } = useSelector((state) => state.projects);
   const { error, transactions, isLoading: isTransactionsLoading } = useSelector((state) => state.transactions);
   const [isCreateWindowOpen, setIsCreateWindowOpen] = useState(false);
-  //   const [organizationFilter, setOrganizationFilter] = useState(null);
-  //   const [TransactionsList, setTransactionsList] = useState([]);
+  const [transactionsList, setTransactionsList] = useState([]);
+  const [projectFilter, setProjectFilter] = useState(null);
   const dispatch = useDispatch();
 
   const isLoading = isTransactionsLoading || isVolunteersLoading || isProjectsLoading;
@@ -35,11 +38,11 @@ export const Transactions = ({ setIsLoading }) => {
     }
   }, []);
 
-  //   useEffect(() => {
-  //     if (transactions.length) {
-  //       setTransactionsList(Transactions);
-  //     }
-  //   }, [Transactions]);
+  useEffect(() => {
+    if (transactions.length) {
+      setTransactionsList(transactions);
+    }
+  }, [transactions]);
 
   useEffect(() => {
     if (error) {
@@ -58,51 +61,51 @@ export const Transactions = ({ setIsLoading }) => {
     setIsLoading(isLoading);
   }, [isLoading]);
 
-  //   useEffect(() => {
-  //     if (organizationFilter) {
-  //       const filteredTransactions = Transactions.filter(
-  //         ({ organizationID }) => organizationID === organizationFilter?.value
-  //       );
-  //       setTransactionsList(filteredTransactions);
-  //     }
-  //   }, [organizationFilter]);
+  useEffect(() => {
+    const filteredTransactions = transactions.filter(({ projectID }) => projectID === projectFilter?.value);
+    if (projectFilter) {
+      setTransactionsList(filteredTransactions);
+    }
+  }, [projectFilter]);
 
-  //   const clearFilter = () => {
-  //     setTransactionsList(Transactions);
-  //     setOrganizationFilter(null);
-  //   };
+  const clearFilter = () => {
+    setTransactionsList(transactions);
+    setProjectFilter(null);
+  };
 
   return (
     <>
       <div className={styles.buttons}>
         <Button text='Create' onClick={() => setIsCreateWindowOpen(true)} />
       </div>
-      {/* <div className={styles.search}>
+      <div className={styles.search}>
         <Dropdown
           className={styles.searchDropdown}
           icon={faSearch}
-          options={organizations.map(({ id, name }) => ({
+          options={projects.map(({ id, name }) => ({
             label: name,
             value: id,
           }))}
-          placeholder='Select organization'
-          selectedOption={organizationFilter}
-          setSelectedOption={(selectedOption) => setOrganizationFilter(selectedOption)}
+          placeholder='Select project'
+          setSelectedOption={(selectedOption) => setProjectFilter(selectedOption)}
+          selectedOption={projectFilter}
         />
         <Button
-          className={cn(styles.clearBtn, { [styles.active]: organizationFilter })}
           onClick={clearFilter}
+          className={cn(styles.clearBtn, { [styles.active]: projectFilter })}
           ghostStyle
           roundStyle
           no3D
         >
           <FontAwesomeIcon icon={faXmark} />
         </Button>
-        {organizationFilter && TransactionsList.length > 0 && (
-          <p className={styles.listLength}>Found {TransactionsList.length} entries</p>
+        {projectFilter && transactionsList.length > 0 && (
+          <p className={styles.listLength}>
+            Found {transactionsList.length} entr{transactionsList.length > 1 ? 'ies' : 'y'}
+          </p>
         )}
-      </div> */}
-      {transactions.length > 0 ? (
+      </div>
+      {transactionsList.length > 0 ? (
         <Table
           columns={[
             { key: 'checkbox', label: '' },
@@ -112,7 +115,7 @@ export const Transactions = ({ setIsLoading }) => {
             { key: 'purpose', label: 'Purpose' },
             { key: 'timestamp', label: 'Timestamp' },
           ]}
-          data={transactions}
+          data={transactionsList}
           renderRow={({ volunteerID, projectID, transactionType, amount, purpose, createdAt }, index) => (
             <>
               <td>{index + 1}</td>
@@ -127,7 +130,7 @@ export const Transactions = ({ setIsLoading }) => {
           )}
         />
       ) : (
-        !isLoading && <NoResults />
+        !isLoading && <NoResults text='This project has no transactions' />
       )}
       <Create isOpen={isCreateWindowOpen} setIsOpen={setIsCreateWindowOpen} />
     </>

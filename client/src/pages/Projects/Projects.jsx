@@ -62,6 +62,7 @@ export const Projects = ({ setIsLoading }) => {
       const filteredProjects = projects.filter(({ organizationID }) => organizationID === organizationFilter?.value);
       setProjectsList(filteredProjects);
     }
+    clearSelection();
   }, [organizationFilter]);
 
   const handleDelete = async () => {
@@ -90,6 +91,11 @@ export const Projects = ({ setIsLoading }) => {
   return (
     <>
       <div className={styles.buttons}>
+        {selectedIDs.length > 0 && (
+          <p className={styles.text}>
+            Selected {selectedIDs.length} entr{selectedIDs.length > 1 ? 'ies' : 'y'}
+          </p>
+        )}
         <Button text='Create' onClick={() => setIsCreateWindowOpen(true)} />
         <Button text='Delete' onClick={handleDelete} ghostStyle disabled={selectedIDs.length === 0} />
       </div>
@@ -115,7 +121,9 @@ export const Projects = ({ setIsLoading }) => {
           <FontAwesomeIcon icon={faXmark} />
         </Button>
         {organizationFilter && projectsList.length > 0 && (
-          <p className={styles.listLength}>Found {projectsList.length} entries</p>
+          <p className={styles.listLength}>
+            Found {projectsList.length} entr{projectsList.length > 1 ? 'ies' : 'y'}
+          </p>
         )}
       </div>
       {projectsList.length > 0 ? (
@@ -129,13 +137,14 @@ export const Projects = ({ setIsLoading }) => {
             { key: 'total', label: 'Total' },
           ]}
           data={projectsList}
+          selectedIDs={selectedIDs}
           renderRow={({ id, name, organizationID, costs, revenue }, index) => {
             const total = revenue - costs;
 
             return (
               <>
-                <td>
-                  <input type='checkbox' checked={selectedIDs.includes(id)} onChange={() => toggleSelection(id)} />
+                <td onClick={() => toggleSelection(id)}>
+                  <input type='checkbox' checked={selectedIDs.includes(id)} />
                   {index + 1}
                 </td>
                 <td>{name}</td>

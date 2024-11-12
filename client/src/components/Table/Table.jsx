@@ -1,7 +1,8 @@
+import cn from 'classnames';
 import styles from 'components/Table/Table.scss';
 
-export const Table = ({ columns, data, renderRow, height }) => (
-  <div className={styles.tableContainer} style={{ height }}>
+export const Table = ({ columns, data, renderRow, selectedIDs }) => (
+  <div className={styles.tableContainer}>
     <table className={styles.table}>
       <thead>
         <tr>
@@ -12,7 +13,9 @@ export const Table = ({ columns, data, renderRow, height }) => (
       </thead>
       <tbody>
         {[...data].reverse().map((item, index) => (
-          <tr key={item.id}>{renderRow(item, index)}</tr>
+          <tr className={cn({ [styles.selected]: selectedIDs?.includes(item.id) })} key={item.id}>
+            {renderRow(item, index)}
+          </tr>
         ))}
       </tbody>
     </table>
