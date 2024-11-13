@@ -141,10 +141,7 @@ export const Volunteers = ({ setIsLoading }) => {
           selectedIDs={selectedIDs}
           renderRow={({ id, name, email, phoneNumber, organizationID }, index) => (
             <>
-              <td onClick={() => toggleSelection(id)}>
-                <input type='checkbox' checked={selectedIDs.includes(id)} />
-                {index + 1}
-              </td>
+              <td onClick={() => toggleSelection(id)}>{index + 1}</td>
               <td>{name}</td>
               <td>{email}</td>
               <td>{phoneNumber}</td>

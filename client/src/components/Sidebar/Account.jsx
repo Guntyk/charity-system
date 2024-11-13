@@ -49,7 +49,7 @@ export const Account = ({ setHeaderTitle }) => {
       <div className={cn(styles.accountActions, { [styles.active]: isUserActionsOpen })}>
         <span>{user?.name}</span>
         <span>{user?.email}</span>
-        <button className={styles.exitBtn} onClick={logout}>
+        <button className={styles.exitBtn} tabIndex={isUserActionsOpen ? 0 : -1} onClick={logout}>
           <FontAwesomeIcon icon={faRightFromBracket} />
           Log out
         </button>

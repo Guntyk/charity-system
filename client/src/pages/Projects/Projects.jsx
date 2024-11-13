@@ -143,10 +143,7 @@ export const Projects = ({ setIsLoading }) => {
 
             return (
               <>
-                <td onClick={() => toggleSelection(id)}>
-                  <input type='checkbox' checked={selectedIDs.includes(id)} />
-                  {index + 1}
-                </td>
+                <td onClick={() => toggleSelection(id)}>{index + 1}</td>
                 <td>{name}</td>
                 <td>{organizations.find(({ id }) => id === organizationID)?.name}</td>
                 <td>{costs ? `-$${Math.abs(costs)}` : '$0'}</td>

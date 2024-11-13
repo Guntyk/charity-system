@@ -125,6 +125,7 @@
     pointer-events: none;
     border: 0.1rem solid $gray;
     border-radius: $borderRadius;
+    background: $white;
     translate: 0 -1rem;
     transition: 0.2s;
 
@@ -150,7 +151,8 @@
   border-radius: $borderRadius;
   transition: 0.2s;
 
-  &:hover {
+  &:hover,
+  &:focus-visible {
     color: $white;
     background: $red;
   }
