@@ -1,0 +1,57 @@
+.toggleButton {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border-radius: $borderRadius;
+  border: 0.1rem solid $lightGray;
+  transition: 0.15s;
+
+  .btn {
+    font-size: 1.8rem;
+    padding-block: $gapExtraSmall;
+    width: calc(100% / var(--tabsLength));
+    line-height: 2.4rem;
+    letter-spacing: 0;
+    text-transform: capitalize;
+    z-index: 1;
+
+    &Active {
+      font-weight: map-get($fontWeights, 'regular');
+      pointer-events: none;
+
+      &[data-color='0'] {
+        color: $dashboard1Dark;
+      }
+      &[data-color='1'] {
+        color: $dashboard2Dark;
+      }
+      &[data-color='2'] {
+        color: $dashboard3Dark;
+      }
+      &[data-color='3'] {
+        color: $dashboard4Dark;
+      }
+    }
+  }
+}
+
+.indicator {
+  position: absolute;
+  height: 100%;
+  border-radius: $borderRadius;
+  width: calc(100% / var(--tabsLength));
+  transition: 0.3s;
+
+  &[data-color='0'] {
+    background: $dashboard1;
+  }
+  &[data-color='1'] {
+    background: $dashboard2;
+  }
+  &[data-color='2'] {
+    background: $dashboard3;
+  }
+  &[data-color='3'] {
+    background: $dashboard4;
+  }
+}

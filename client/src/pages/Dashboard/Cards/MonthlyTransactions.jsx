@@ -1,27 +1,27 @@
 import { Line } from 'react-chartjs-2';
 import { useState } from 'react';
 import cn from 'classnames';
+import { TabSelector } from 'components/TabSelector';
 import styles from 'pages/Dashboard/Dashboard.scss';
+import { formatMoney } from 'helpers/formatMoney';
 
 export const MonthlyTransactions = ({ transactions }) => {
-  const [timePeriod, setTimePeriod] = useState('month');
+  const [timePeriodIndex, setTimePeriodIndex] = useState(1);
+  const timePeriods = ['week', 'month', 'year', 'all'];
 
   return (
     <div className={cn(styles.card, styles.chart)}>
-      <h3 className={styles.title}>Monthly Deposits & Withdrawals</h3>
-      <div className={styles.periodToggle}>
-        {['week', 'month', 'year', 'all'].map((period) => (
-          <button
-            key={period}
-            onClick={() => setTimePeriod(period)}
-            className={cn({ [styles.active]: timePeriod === period })}
-          >
-            {period.charAt(0).toUpperCase() + period.slice(1)}
-          </button>
-        ))}
+      <div className={styles.cardHeader}>
+        <h3 className={styles.title}>Monthly Deposits & Withdrawals</h3>
+        <TabSelector
+          className={styles.periodToggle}
+          tabs={timePeriods}
+          activeTabIndex={timePeriodIndex}
+          setActiveTabIndex={setTimePeriodIndex}
+        />
       </div>
       <div className={styles.chartContainer}>
-        <Line data={transactionsData(transactions, timePeriod)} options={lineChartOptions} />
+        <Line data={transactionsData(transactions, timePeriods[timePeriodIndex])} options={lineChartOptions} />
       </div>
     </div>
   );
@@ -43,12 +43,23 @@ const transactionsData = (transactions, period) => {
         return true;
     }
   });
+
   const months = Array.from({ length: 12 }, (_, i) => new Date(0, i).toLocaleString('en', { month: 'short' }));
   const weeklyLabels = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() - i);
     return date.toLocaleDateString('en', { weekday: 'short' });
   }).reverse();
+
+  const getMonthlyLabels = (startYear, endYear) => {
+    const labels = [];
+    for (let year = startYear; year <= endYear; year++) {
+      for (let month = 0; month < 12; month++) {
+        labels.push(`${new Date(year, month).toLocaleString('en', { month: 'short' })} ${year}`);
+      }
+    }
+    return labels;
+  };
 
   let deposits = [];
   let withdrawals = [];
@@ -77,7 +88,6 @@ const transactionsData = (transactions, period) => {
       break;
 
     case 'year':
-    case 'all':
       deposits = Array(12).fill(0);
       withdrawals = Array(12).fill(0);
 
@@ -87,6 +97,55 @@ const transactionsData = (transactions, period) => {
         if (transactionType === 'withdrawal') withdrawals[month] += parseFloat(amount);
       });
       break;
+
+    case 'all':
+    default:
+      const yearsRange = filteredTransactions.reduce(
+        (range, { createdAt }) => {
+          const year = new Date(createdAt).getFullYear();
+          return {
+            min: Math.min(range.min, year),
+            max: Math.max(range.max, year),
+          };
+        },
+        { min: now.getFullYear(), max: now.getFullYear() }
+      );
+
+      const startYear = yearsRange.min;
+      const endYear = yearsRange.max;
+
+      const numMonths = (endYear - startYear + 1) * 12;
+      deposits.length = numMonths;
+      withdrawals.length = numMonths;
+      deposits.fill(0);
+      withdrawals.fill(0);
+
+      filteredTransactions.forEach(({ createdAt, transactionType, amount }) => {
+        const date = new Date(createdAt);
+        const monthIndex = (date.getFullYear() - startYear) * 12 + date.getMonth();
+        if (transactionType === 'deposit') deposits[monthIndex] += parseFloat(amount);
+        if (transactionType === 'withdrawal') withdrawals[monthIndex] += parseFloat(amount);
+      });
+
+      return {
+        labels: getMonthlyLabels(startYear, endYear),
+        datasets: [
+          {
+            label: 'Deposits',
+            data: deposits,
+            borderColor: '#6992d3',
+            tension: 0.3,
+            pointRadius: 0,
+          },
+          {
+            label: 'Withdrawals',
+            data: withdrawals,
+            borderColor: '#a486d1',
+            tension: 0.3,
+            pointRadius: 0,
+          },
+        ],
+      };
   }
 
   return {
@@ -128,13 +187,25 @@ const lineChartOptions = {
   },
   scales: {
     x: {
+      ticks: {
+        font: {
+          family: 'Poppins',
+          size: 12,
+        },
+        maxTicksLimit: 7,
+      },
       grid: {
         display: false,
       },
     },
     y: {
       ticks: {
-        maxTicksLimit: 3,
+        font: {
+          family: 'Poppins',
+          size: 12,
+        },
+        callback: (value) => '$' + formatMoney(value),
+        maxTicksLimit: 5,
       },
       border: {
         display: false,
