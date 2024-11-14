@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from 'api';
 import { setToken, getToken, setRefreshToken, getRefreshToken, removeTokens } from 'services/tokenService';
+import { addNotification } from './notificationsSlice';
 
 export const registerUser = createAsyncThunk('auth/registerUser', async (userData, { dispatch, rejectWithValue }) => {
   try {
@@ -12,11 +13,23 @@ export const registerUser = createAsyncThunk('auth/registerUser', async (userDat
   }
 });
 
-export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, { rejectWithValue }) => {
+export const loginUser = createAsyncThunk('auth/loginUser', async (credentials, { dispatch, rejectWithValue }) => {
   try {
     const response = await api.post('/auth/login', credentials);
     setToken(response.data.token);
     setRefreshToken(response.data.refreshToken);
+
+    if (response.data.token) {
+      dispatch(
+        addNotification({
+          id: Date.now(),
+          title: 'Success',
+          text: 'Successful login',
+          type: 'success',
+        })
+      );
+    }
+
     return response.data.token;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || 'Login failed');

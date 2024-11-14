@@ -10,10 +10,16 @@ const getAllTransactions = async (req, res) => {
 };
 
 const createTransaction = async (req, res) => {
-  const { volunteerID, projectID, type, amount, purpose } = req.body;
+  const { volunteerID, projectID, type, amount, purpose, timestamp } = req.body;
 
   try {
-    const newTransaction = await Transaction.create({ volunteerID, projectID, transactionType: type, amount, purpose });
+    const newTransaction = await Transaction.create({
+      volunteerID,
+      projectID,
+      transactionType: type,
+      amount,
+      purpose,
+    });
     res.status(201).json(newTransaction);
   } catch (error) {
     res.status(500).json({ message: 'Error creating transaction', error });

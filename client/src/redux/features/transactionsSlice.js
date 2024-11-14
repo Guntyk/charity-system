@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from 'api';
 import { getToken } from 'services/tokenService';
+import { addNotification } from './notificationsSlice';
 
 export const getTransactions = createAsyncThunk('transactions/getTransactions', async (_, { rejectWithValue }) => {
   try {
@@ -14,7 +15,7 @@ export const getTransactions = createAsyncThunk('transactions/getTransactions', 
 
 export const createTransaction = createAsyncThunk(
   'transactions/createTransaction',
-  async (transactionData, { rejectWithValue }) => {
+  async (transactionData, { dispatch, rejectWithValue }) => {
     try {
       const token = getToken();
       const response = await api.post('/transactions', transactionData, {
@@ -22,6 +23,17 @@ export const createTransaction = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (response.data) {
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            title: 'Created',
+            text: 'Transaction created successfully',
+            type: 'success',
+          })
+        );
+      }
 
       return response.data;
     } catch (error) {
@@ -46,7 +58,7 @@ const transactionsSlice = createSlice({
         state.error = action.payload || 'Error getting transactions';
       })
       .addCase(createTransaction.fulfilled, (state, action) => {
-        state.transactions = [action.payload, ...state.transactions];
+        state.transactions = [...state.transactions, action.payload];
       })
       .addCase(createTransaction.rejected, (state, action) => {
         state.error = action.payload || 'Error creating transaction';

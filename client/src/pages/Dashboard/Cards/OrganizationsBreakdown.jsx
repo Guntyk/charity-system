@@ -37,13 +37,15 @@ export const OrganizationsBreakdown = ({ organizations, projects }) => {
         <span className={styles.subtitle}>The biggest organization</span>
         <span className={styles.number}>{getBiggestOrganization(organizations, projects)}</span>
       </div>
-      <Doughnut
-        height='100%'
-        width='100%'
-        className={styles.chart}
-        data={organizationBreakdownData(organizations, projects)}
-        options={doughnutChartOptions}
-      />
+      <div className={styles.donutContainer}>
+        <Doughnut
+          height='100%'
+          width='100%'
+          className={styles.chart}
+          data={organizationBreakdownData(organizations, projects)}
+          options={doughnutChartOptions}
+        />
+      </div>
     </div>
   );
 };
@@ -54,7 +56,7 @@ const doughnutChartOptions = {
   rotation: -90,
   cutout: '70%',
   spacing: -1,
-  radius: 150,
+  radius: 170,
   borderWidth: 0,
   maintainAspectRatio: false,
   plugins: {

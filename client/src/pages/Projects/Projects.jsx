@@ -13,6 +13,7 @@ import { Button } from 'components/Button';
 import { Table } from 'components/Table';
 import { Create } from 'pages/Projects/Create';
 import styles from 'pages/Projects/Projects.scss';
+import { formatMoney } from 'helpers/formatMoney';
 
 export const Projects = ({ setIsLoading }) => {
   const { organizations, isLoading: isOrganizationsLoading } = useSelector((state) => state.organizations);
@@ -35,9 +36,7 @@ export const Projects = ({ setIsLoading }) => {
   }, []);
 
   useEffect(() => {
-    if (projects.length) {
-      setProjectsList(projects);
-    }
+    setProjectsList(projects);
   }, [projects]);
 
   useEffect(() => {
@@ -146,10 +145,10 @@ export const Projects = ({ setIsLoading }) => {
                 <td onClick={() => toggleSelection(id)}>{index + 1}</td>
                 <td>{name}</td>
                 <td>{organizations.find(({ id }) => id === organizationID)?.name}</td>
-                <td>{costs ? `-$${Math.abs(costs)}` : '$0'}</td>
-                <td>{revenue ? `+$${Math.abs(revenue)}` : '$0'}</td>
+                <td>{costs ? `-$${formatMoney(Math.abs(costs))}` : '$0'}</td>
+                <td>{revenue ? `+$${formatMoney(Math.abs(revenue))}` : '$0'}</td>
                 <td className={cn({ [styles.cost]: total < 0, [styles.revenue]: total > 0 })}>
-                  {total === 0 ? '$0' : `${total > 0 ? '+' : '-'}$${Math.abs(total)}`}
+                  {total === 0 ? '$0' : `${total > 0 ? '+' : '-'}$${formatMoney(Math.abs(total))}`}
                 </td>
               </>
             );

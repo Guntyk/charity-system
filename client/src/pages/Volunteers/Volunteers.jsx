@@ -35,9 +35,7 @@ export const Volunteers = ({ setIsLoading }) => {
   }, []);
 
   useEffect(() => {
-    if (volunteers.length) {
-      setVolunteersList(volunteers);
-    }
+    setVolunteersList(volunteers);
   }, [volunteers]);
 
   useEffect(() => {

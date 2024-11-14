@@ -7,6 +7,7 @@ import { getTransactions } from '@redux/features/transactionsSlice';
 import { addNotification } from '@redux/features/notificationsSlice';
 import { getVolunteers } from '@redux/features/volunteersSlice';
 import { getProjects } from '@redux/features/projectsSlice';
+import { formatMoney } from 'helpers/formatMoney';
 import { formatDate } from 'helpers/formatDate';
 import { NoResults } from 'components/NoResults';
 import { Dropdown } from 'components/Dropdown';
@@ -39,9 +40,7 @@ export const Transactions = ({ setIsLoading }) => {
   }, []);
 
   useEffect(() => {
-    if (transactions.length) {
-      setTransactionsList(transactions);
-    }
+    setTransactionsList(transactions);
   }, [transactions]);
 
   useEffect(() => {
@@ -121,7 +120,7 @@ export const Transactions = ({ setIsLoading }) => {
               <td>{index + 1}</td>
               <td>{volunteers.find(({ id }) => id === volunteerID)?.name}</td>
               <td className={cn(styles.money, { [styles.deposit]: transactionType === 'deposit' })}>
-                {transactionType === 'deposit' ? '+' : '-'}${amount}
+                {transactionType === 'deposit' ? '+' : '-'}${formatMoney(amount)}.00
               </td>
               <td>{projects.find(({ id }) => id === projectID)?.name}</td>
               <td>{purpose}</td>

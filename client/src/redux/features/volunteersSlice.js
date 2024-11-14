@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from 'api';
 import { getToken } from 'services/tokenService';
+import { addNotification } from './notificationsSlice';
 
 export const getVolunteers = createAsyncThunk('volunteers/getVolunteers', async (_, { rejectWithValue }) => {
   try {
@@ -14,7 +15,7 @@ export const getVolunteers = createAsyncThunk('volunteers/getVolunteers', async 
 
 export const createVolunteer = createAsyncThunk(
   'volunteers/createVolunteer',
-  async (volunteerData, { rejectWithValue }) => {
+  async (volunteerData, { dispatch, rejectWithValue }) => {
     try {
       const token = getToken();
       const response = await api.post('/volunteers', volunteerData, {
@@ -22,6 +23,17 @@ export const createVolunteer = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (response.data) {
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            title: 'Created',
+            text: 'Volunteer created successfully',
+            type: 'success',
+          })
+        );
+      }
 
       return response.data;
     } catch (error) {
@@ -65,7 +77,7 @@ const volunteersSlice = createSlice({
         state.error = action.payload || 'Error getting volunteers';
       })
       .addCase(createVolunteer.fulfilled, (state, action) => {
-        state.volunteers = [action.payload, ...state.volunteers];
+        state.volunteers = [...state.volunteers, action.payload];
       })
       .addCase(createVolunteer.rejected, (state, action) => {
         state.error = action.payload || 'Error creating volunteer';

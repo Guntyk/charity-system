@@ -142,6 +142,10 @@
   background: $secondary1;
 }
 
+.donutContainer {
+  margin-top: 1.3rem;
+}
+
 .volunteers {
   font-size: 1.6rem;
 
@@ -184,15 +188,29 @@
     color: $white;
     font-size: 1.2rem;
     aspect-ratio: 1;
-    background: $primary1;
     border-radius: 50%;
     overflow: hidden;
     user-select: none;
+
+    &[data-color='1'] {
+      background: $dashboard1;
+    }
+    &[data-color='2'] {
+      background: $dashboard2;
+    }
+    &[data-color='3'] {
+      background: $dashboard3;
+    }
   }
 
   .transaction {
     color: $gray1;
   }
+}
+
+.periodToggle {
+  display: flex;
+  gap: $gapExtraSmall;
 }
 
 .chart {

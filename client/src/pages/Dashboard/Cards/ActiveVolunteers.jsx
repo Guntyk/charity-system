@@ -27,24 +27,29 @@ export const ActiveVolunteers = ({ transactions, volunteers }) => {
 
       if (!acc[id]) {
         acc[id] = {
-          count: 0,
           totalDeposits: 0,
           totalWithdrawals: 0,
+          totalAmount: 0,
         };
       }
 
-      acc[id].count += 1;
+      const transactionAmount = parseFloat(amount);
+      acc[id].totalAmount += Math.abs(transactionAmount);
+
       if (transactionType === 'deposit') {
-        acc[id].totalDeposits += parseFloat(amount);
+        acc[id].totalDeposits += transactionAmount;
       } else if (transactionType === 'withdrawal') {
-        acc[id].totalWithdrawals += parseFloat(amount);
+        acc[id].totalWithdrawals += transactionAmount;
       }
 
       return acc;
     }, {});
 
     const topVolunteers = Object.entries(volunteerStats)
-      .sort((a, b) => b[1].count - a[1].count)
+      .sort(
+        (a, b) =>
+          Math.abs(b[1].totalDeposits - b[1].totalWithdrawals) - Math.abs(a[1].totalDeposits - a[1].totalWithdrawals)
+      )
       .slice(0, 5)
       .map(([volunteerID, stats]) => ({
         id: volunteers.find((vol) => vol.id === Number(volunteerID))?.id,
@@ -69,7 +74,9 @@ export const ActiveVolunteers = ({ transactions, volunteers }) => {
           getActiveVolunteersData().map((v) => (
             <li key={v.id}>
               <span className={styles.name}>
-                <span className={styles.avatar}>{v.name.split(' ').map((word) => word.charAt(0))}</span>
+                <span className={styles.avatar} data-color={Math.floor(Math.random() * 3) + 1}>
+                  {v.name.split(' ').map((word) => word.charAt(0))}
+                </span>
                 {v.name}
               </span>
               <span className={styles.transaction}>${formatMoney(v.totalDeposits)}</span>

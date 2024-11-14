@@ -3,7 +3,6 @@ const Organization = require('./Organization');
 const Project = require('./Project');
 const Transaction = require('./Transaction');
 const Volunteer = require('./Volunteer');
-const Admin = require('./Admin');
 const User = require('./User');
 
 Organization.hasMany(Project, { foreignKey: 'organizationID' });
@@ -29,7 +28,6 @@ module.exports = {
   Project,
   Transaction,
   Volunteer,
-  Admin,
   User,
   ProjectVolunteer,
 };

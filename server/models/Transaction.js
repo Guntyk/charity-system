@@ -45,6 +45,7 @@ const Transaction = sequelize.define(
   },
   {
     tableName: 'transactions',
+    timestamps: true,
   }
 );
 

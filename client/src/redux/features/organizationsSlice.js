@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from 'api';
 import { getToken } from 'services/tokenService';
+import { addNotification } from './notificationsSlice';
 
 export const getOrganizations = createAsyncThunk('organizations/getOrganizations', async (_, { rejectWithValue }) => {
   try {
@@ -14,7 +15,7 @@ export const getOrganizations = createAsyncThunk('organizations/getOrganizations
 
 export const createOrganization = createAsyncThunk(
   'organizations/createOrganization',
-  async (organizationData, { rejectWithValue }) => {
+  async (organizationData, { dispatch, rejectWithValue }) => {
     try {
       const token = getToken();
       const response = await api.post('/organizations', organizationData, {
@@ -22,6 +23,17 @@ export const createOrganization = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
+
+      if (response.data) {
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            title: 'Created',
+            text: 'Organization created successfully',
+            type: 'success',
+          })
+        );
+      }
 
       return response.data;
     } catch (error) {

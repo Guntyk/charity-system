@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from 'api';
 import { getToken } from 'services/tokenService';
+import { addNotification } from './notificationsSlice';
 
 export const getProjects = createAsyncThunk('projects/getProjects', async (_, { rejectWithValue }) => {
   try {
@@ -12,20 +13,34 @@ export const getProjects = createAsyncThunk('projects/getProjects', async (_, { 
   }
 });
 
-export const createProject = createAsyncThunk('projects/createProject', async (projectData, { rejectWithValue }) => {
-  try {
-    const token = getToken();
-    const response = await api.post('/projects', projectData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+export const createProject = createAsyncThunk(
+  'projects/createProject',
+  async (projectData, { dispatch, rejectWithValue }) => {
+    try {
+      const token = getToken();
+      const response = await api.post('/projects', projectData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data?.message || 'Creating project failed');
+      if (response.data) {
+        dispatch(
+          addNotification({
+            id: Date.now(),
+            title: 'Created',
+            text: 'Project created successfully',
+            type: 'success',
+          })
+        );
+      }
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Creating project failed');
+    }
   }
-});
+);
 
 export const deleteProjects = createAsyncThunk('projects/deleteProjects', async (projectIds, { rejectWithValue }) => {
   try {
