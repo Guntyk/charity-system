@@ -20,6 +20,7 @@
   padding: $gapLarge;
   border: 0.1rem solid $lightGray;
   border-radius: $borderRadius;
+  background: $white;
   overflow: hidden;
 }
 
@@ -45,7 +46,6 @@
   padding-left: calc($gapMedium + 1rem + $gapMedium);
   background: $secondary1;
   border-radius: $borderRadius;
-  z-index: -1;
 
   &::before {
     content: '';
