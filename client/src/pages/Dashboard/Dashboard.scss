@@ -133,7 +133,8 @@
 
   .subtitle {
     font-size: 1.4rem;
-    color: $gray;
+    color: $gray1;
+    font-weight: map-get($fontWeights, 'light');
   }
 
   .number {

@@ -15,7 +15,7 @@ export const OrganizationsBreakdown = ({ organizations, projects }) => {
     const projectCounts = organizations.map(
       (org) => projects.filter((project) => project.organizationID === org.id).length
     );
-
+    const clearedProjectsCount = projectCounts.filter((count) => count);
     const organizationIDs = projects.map(({ organizationID }) => organizationID);
 
     return {
@@ -23,7 +23,7 @@ export const OrganizationsBreakdown = ({ organizations, projects }) => {
       datasets: [
         {
           label: 'Number of projects',
-          data: projectCounts,
+          data: clearedProjectsCount,
           backgroundColor: ['#d5e4fa', '#e5d6fb', '#fbd4f5', '#fffdc7'],
         },
       ],
