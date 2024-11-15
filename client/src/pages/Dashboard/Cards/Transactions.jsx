@@ -5,14 +5,14 @@ import { TabSelector } from 'components/TabSelector';
 import styles from 'pages/Dashboard/Dashboard.scss';
 import { formatMoney } from 'helpers/formatMoney';
 
-export const MonthlyTransactions = ({ transactions }) => {
+export const Transactions = ({ transactions }) => {
   const [timePeriodIndex, setTimePeriodIndex] = useState(1);
   const timePeriods = ['week', 'month', 'year', 'all'];
 
   return (
     <div className={cn(styles.card, styles.chart)}>
       <div className={styles.cardHeader}>
-        <h3 className={styles.title}>Monthly Deposits & Withdrawals</h3>
+        <h3 className={styles.title}>Deposits & Withdrawals</h3>
         <TabSelector
           className={styles.periodToggle}
           tabs={timePeriods}

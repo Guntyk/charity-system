@@ -16,11 +16,11 @@ import { getTransactions } from '@redux/features/transactionsSlice';
 import { getVolunteers } from '@redux/features/volunteersSlice';
 import { getProjects } from '@redux/features/projectsSlice';
 import { OrganizationsBreakdown } from './Cards/OrganizationsBreakdown';
-import { MonthlyTransactions } from './Cards/MonthlyTransactions';
+import { Transactions } from './Cards/Transactions';
 import { ActiveVolunteers } from './Cards/ActiveVolunteers';
+import { TopProjects } from './Cards/TopProjects';
 import { Summary } from './Cards/Summary';
 import styles from 'pages/Dashboard/Dashboard.scss';
-import { TopProjects } from './Cards/TopProjects';
 
 ChartJS.register(CategoryScale, LinearScale, ArcElement, BarElement, PointElement, LineElement, Tooltip, Legend);
 
@@ -54,7 +54,7 @@ export const Dashboard = () => {
         />
         <OrganizationsBreakdown organizations={organizations} projects={projects} />
         <ActiveVolunteers transactions={transactions} volunteers={volunteers} />
-        <MonthlyTransactions transactions={transactions} />
+        <Transactions transactions={transactions} />
         <TopProjects projects={projects} />
       </section>
     </>
