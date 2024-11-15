@@ -32,7 +32,7 @@ export const OrganizationsBreakdown = ({ organizations, projects }) => {
 
   return (
     <div className={cn(styles.card, styles.projects)}>
-      <h3 className={styles.title}>Projects breakdown</h3>
+      <h3 className={styles.title}>Organizations breakdown</h3>
       <div className={styles.tag}>
         <span className={styles.subtitle}>The biggest organization</span>
         <span className={styles.number}>{getBiggestOrganization(organizations, projects)}</span>
